@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/terrain"/>
+	<classpathentry kind="src" path="test-data"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="src" path="src/niftygui"/>
+	<classpathentry kind="src" path="src/bullet-native"/>
+	<classpathentry kind="src" path="src/bullet"/>
+	<classpathentry kind="src" path="src/bullet-common"/>
+	<classpathentry kind="src" path="src/tools"/>
+	<classpathentry kind="src" path="src/ogre"/>
+	<classpathentry kind="src" path="src/desktop"/>
+	<classpathentry kind="src" path="src/core-effects"/>
+	<classpathentry kind="src" path="src/xml"/>
+	<classpathentry kind="src" path="src/core-data"/>
+	<classpathentry kind="src" path="src/jogl"/>
+	<classpathentry kind="src" path="src/core-plugins"/>
+	<classpathentry kind="src" path="src/core"/>
+	<classpathentry kind="src" path="src/networking"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="lib/niftygui/nifty-default-controls.jar"/>
+	<classpathentry kind="lib" path="lib/niftygui/nifty.jar"/>
+	<classpathentry kind="lib" path="lib/niftygui/xmlpull-xpp3.jar"/>
+	<classpathentry kind="lib" path="lib/junit_4/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/joal.jar"/>
+	<classpathentry kind="lib" path="lib/jogl/jogl-all.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

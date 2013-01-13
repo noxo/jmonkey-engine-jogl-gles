@@ -78,7 +78,7 @@ import javax.media.opengl.GLContext;
 import jme3tools.converters.MipMapGenerator;
 import jme3tools.shader.ShaderDebug;
 
-public class JoglRenderer implements Renderer {
+public class JoglRenderer implements WrappedJoglRenderer {
 
     private static final Logger logger = Logger.getLogger(JoglRenderer.class.getName());
     private static final boolean VALIDATE_SHADER = false;

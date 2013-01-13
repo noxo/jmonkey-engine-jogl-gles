@@ -38,6 +38,7 @@ import com.jme3.input.TouchInput;
 import com.jme3.input.jogl.NewtKeyInput;
 import com.jme3.input.jogl.NewtMouseInput;
 import com.jme3.renderer.jogl.JoglRenderer;
+import com.jme3.renderer.jogl.JoglRendererGLES2;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.AnimatorBase;
@@ -71,11 +72,13 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
     protected AtomicBoolean autoFlush = new AtomicBoolean(true);
 
     protected boolean wasAnimating = false;
-
+    
+    private final boolean embedded = true;
+    
     protected void initGLCanvas() {
         //FIXME use the settings to know whether to use the max programmable profile
         //then call GLProfile.getMaxProgrammable(true);
-        GLCapabilities caps = new GLCapabilities(GLProfile.getMaxFixedFunc(true));
+        GLCapabilities caps = new GLCapabilities(embedded ? GLProfile.getGL2ES2() : GLProfile.getMaxFixedFunc(true));
         caps.setHardwareAccelerated(true);
         caps.setDoubleBuffered(true);
         caps.setStencilBits(settings.getStencilBits());
@@ -112,7 +115,12 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
             });
         }
         
-        renderer = new JoglRenderer();
+        if (embedded) { 
+        	renderer = new JoglRendererGLES2();
+        }
+        else {
+        	renderer = new JoglRenderer();
+        }
     }
 
     protected void startGLCanvas() {

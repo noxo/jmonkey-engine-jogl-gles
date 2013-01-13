@@ -53,7 +53,7 @@ import com.jme3.util.BufferUtils;
 import com.jme3.util.ListMap;
 import com.jme3.util.NativeObjectManager;
 
-public class JoglRendererGLES2 implements Renderer {
+public class JoglRendererGLES2 implements WrappedJoglRenderer {
 
 	private static final Logger logger = Logger
 			.getLogger(JoglRendererGLES2.class.getName());

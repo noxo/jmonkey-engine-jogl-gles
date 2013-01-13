@@ -37,6 +37,8 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.renderer.Renderer;
 import com.jme3.renderer.jogl.JoglRenderer;
+import com.jme3.renderer.jogl.JoglRendererGLES2;
+import com.jme3.renderer.jogl.WrappedJoglRenderer;
 import com.jme3.system.AppSettings;
 import com.jme3.system.JmeContext;
 import com.jme3.system.NanoTimer;
@@ -55,7 +57,7 @@ public abstract class JoglContext implements JmeContext {
     protected final Object createdLock = new Object();
 
     protected AppSettings settings = new AppSettings(true);
-    protected JoglRenderer renderer;
+    protected WrappedJoglRenderer renderer;
     protected Timer timer;
     protected SystemListener listener;
 

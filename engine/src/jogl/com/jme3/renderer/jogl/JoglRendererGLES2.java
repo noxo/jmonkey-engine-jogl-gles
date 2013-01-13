@@ -299,7 +299,7 @@ public class JoglRendererGLES2 implements Renderer {
 					intBuf16.get(i));
 		}
 
-		TextureUtil.loadTextureFeatures(extensions);
+		TextureUtilGLES.loadTextureFeatures(extensions);
 
 		applyRenderState(RenderState.DEFAULT);
 		gl.glDisable(GL2ES2.GL_DITHER);
@@ -1452,25 +1452,7 @@ public class JoglRendererGLES2 implements Renderer {
 		}
 
 		if (target == GL2ES2.GL_TEXTURE_CUBE_MAP) {
-			// Upload a cube map / sky box
-			@SuppressWarnings("unchecked")
-			List<AndroidImageInfo> bmps = (List<AndroidImageInfo>) img
-					.getEfficentData();
-
-			if (bmps != null) {
-				// Native android bitmap
-				if (bmps.size() != 6) {
-					throw new UnsupportedOperationException("Invalid texture: "
-							+ img
-							+ "Cubemap textures must contain 6 data units.");
-				}
-				for (int i = 0; i < 6; i++) {
-					TextureUtil.uploadTextureBitmap(
-							GL2ES2.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, bmps
-									.get(i).getBitmap(), needMips);
-					bmps.get(i).notifyBitmapUploaded();
-				}
-			} else {
+			
 				// Standard jme3 image data
 				List<ByteBuffer> data = img.getData();
 				if (data.size() != 6) {
@@ -1479,18 +1461,14 @@ public class JoglRendererGLES2 implements Renderer {
 							+ "Cubemap textures must contain 6 data units.");
 				}
 				for (int i = 0; i < 6; i++) {
-					TextureUtil.uploadTextureAny(img,
+					TextureUtilGLES.uploadTextureAny(img,
 							GL2ES2.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, i,
 							needMips);
 				}
-			}
+			
 		} else {
-			TextureUtil.uploadTextureAny(img, target, 0, needMips);
-			if (img.getEfficentData() instanceof AndroidImageInfo) {
-				AndroidImageInfo info = (AndroidImageInfo) img
-						.getEfficentData();
-				info.notifyBitmapUploaded();
-			}
+			TextureUtilGLES.uploadTextureAny(img, target, 0, needMips);
+			
 		}
 
 		img.clearUpdateNeeded();

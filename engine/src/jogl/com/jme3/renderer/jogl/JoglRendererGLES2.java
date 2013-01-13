@@ -150,6 +150,8 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 				gl.glGetString(GL2ES2.GL_VERSION));
 		logger.log(Level.INFO, "Shading Language Version: {0}",
 				gl.glGetString(GL2ES2.GL_SHADING_LANGUAGE_VERSION));
+		logger.log(Level.INFO,"GL Profile: "+gl.getGLProfile());
+		logger.log(Level.INFO,"GL Renderer Quirks:" + gl.getContext().getRendererQuirks().toString());
 
 		powerVr = gl.glGetString(GL2ES2.GL_RENDERER).contains("PowerVR");
 
@@ -160,25 +162,26 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		// initialReadBuf = GL2ES2.glGetIntegeri(GL2ES2.GL_READ_BUFFER);
 
 		// Check OpenGL version
-		int openGlVer = extractVersion("OpenGL ES ",
-				gl.glGetString(GL2ES2.GL_VERSION));
-		if (openGlVer == -1) {
-			glslVer = -1;
-			throw new UnsupportedOperationException(
-					"OpenGL ES 2.0+ is required for OGLESShaderRenderer!");
-		}
+		
+//		int openGlVer = extractVersion("OpenGL ES ",
+//				gl.glGetString(GL2ES2.GL_VERSION));
+//		if (openGlVer == -1) {
+//			glslVer = -1;
+//			throw new UnsupportedOperationException(
+//					"OpenGL ES 2.0+ is required for OGLESShaderRenderer!");
+//		}
 
-		// Check shader language version
-		glslVer = extractVersion("OpenGL ES GLSL ES ",
-				gl.glGetString(GL2ES2.GL_SHADING_LANGUAGE_VERSION));
-		switch (glslVer) {
-		// TODO: When new versions of OpenGL ES shader language come out,
-		// update this.
-		default:
-			caps.add(Caps.GLSL100);
-			break;
-		}
-
+//		// Check shader language version
+//		glslVer = extractVersion("OpenGL ES GLSL ES ",
+//				gl.glGetString(GL2ES2.GL_SHADING_LANGUAGE_VERSION));
+//		switch (glslVer) {
+//		// TODO: When new versions of OpenGL ES shader language come out,
+//		// update this.
+//		default:
+//			caps.add(Caps.GLSL100);
+//			break;
+//		}
+		caps.add(Caps.GLSL100);
 		gl.glGetIntegerv(GL2ES2.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, intBuf16);
 		vertexTextureUnits = intBuf16.get(0);
 		logger.log(Level.INFO, "VTF Units: {0}", vertexTextureUnits);
@@ -315,7 +318,7 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		// } else {
 		// useVBO = false;
 		// }
-		useVBO = true;
+		//useVBO = true;
 
 		logger.log(Level.INFO, "Caps: {0}", caps);
 	}
@@ -550,8 +553,9 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 
 	public void onFrame() {
 		int error = getGL().glGetError();
+		
 		if (error != GL2ES2.GL_NO_ERROR) {
-			throw new RendererException("OpenGL Error " + error
+			throw new RendererException("onFrame//OpenGL Error " + error
 					+ ". Enable error checking for more info.");
 		}
 		objManager.deleteUnused(this);
@@ -2047,6 +2051,7 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		GL2ES2 gles2 = getGL();
 		
 		if (context.pointSize != mesh.getPointSize()) {
+			System.out.println("------render mesh GLES1");
 			gles1.glPointSize(mesh.getPointSize());
 			context.pointSize = mesh.getPointSize();
 		}

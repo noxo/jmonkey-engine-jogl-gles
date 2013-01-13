@@ -78,17 +78,34 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
     protected void initGLCanvas() {
         //FIXME use the settings to know whether to use the max programmable profile
         //then call GLProfile.getMaxProgrammable(true);
-        GLCapabilities caps = new GLCapabilities(embedded ? GLProfile.getGL2ES2() : GLProfile.getMaxFixedFunc(true));
-        caps.setHardwareAccelerated(true);
-        caps.setDoubleBuffered(true);
-        caps.setStencilBits(settings.getStencilBits());
-        caps.setDepthBits(settings.getDepthBits());
+    	
+		GLCapabilities caps = null;
 
-        if (settings.getSamples() > 1) {
-            caps.setSampleBuffers(true);
-            caps.setNumSamples(settings.getSamples());
-        }
+		if (embedded) {
+	        caps = new GLCapabilities(GLProfile.get(GLProfile.GL2ES2));
+	        caps.setBackgroundOpaque(false);
+			caps.setHardwareAccelerated(true);
+			caps.setDoubleBuffered(true);
+			caps.setStencilBits(settings.getStencilBits());
+			caps.setDepthBits(settings.getDepthBits());
+
+		} else {
+			
+			caps = new GLCapabilities(GLProfile.getMaxFixedFunc(true));
+			caps.setHardwareAccelerated(true);
+			caps.setDoubleBuffered(true);
+			caps.setStencilBits(settings.getStencilBits());
+			caps.setDepthBits(settings.getDepthBits());
+
+			if (settings.getSamples() > 1) {
+				caps.setSampleBuffers(true);
+				caps.setNumSamples(settings.getSamples());
+			}
+
+		}
+         
         canvas = GLWindow.create(caps);
+        
         if (settings.isVSync()) {
             canvas.invoke(false, new GLRunnable() {
 
@@ -98,6 +115,7 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
                 }
             });
         }
+        
         canvas.requestFocus();
         canvas.setSize(settings.getWidth(), settings.getHeight());
         canvas.addGLEventListener(this);
@@ -121,6 +139,7 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
         else {
         	renderer = new JoglRenderer();
         }
+        
     }
 
     protected void startGLCanvas() {

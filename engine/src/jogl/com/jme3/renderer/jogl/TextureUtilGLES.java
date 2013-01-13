@@ -6,11 +6,8 @@ import java.util.logging.Logger;
 
 import javax.media.opengl.GL2ES2;
 import javax.media.opengl.GLContext;
-
-import com.jme3.asset.AndroidImageInfo;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.RendererException;
-import com.jme3.renderer.android.TextureUtil;
 import com.jme3.texture.Image;
 import com.jme3.texture.Image.Format;
 import com.jme3.util.BufferUtils;
@@ -40,8 +37,6 @@ public class TextureUtilGLES {
 	private static GL2ES2 getGL() {
 		return GLContext.getCurrentGL().getGL2ES2();
 	}
-	
-
     
     public static void uploadTextureAny(Image img, int target, int index, boolean needMips) {
  
@@ -77,11 +72,6 @@ public class TextureUtilGLES {
     private static void uploadTexture(Image img,
                                      int target,
                                      int index){
-
-        if (img.getEfficentData() instanceof AndroidImageInfo){
-            throw new RendererException("This image uses efficient data. "
-                    + "Use uploadTextureBitmap instead.");
-        }
 
         // Otherwise upload image directly. 
         // Prefer to only use power of 2 textures here to avoid errors.
@@ -121,6 +111,7 @@ public class TextureUtilGLES {
             case Depth32F:
                 throw new UnsupportedOperationException("The image format '" 
                         + fmt + "' is not supported by OpenGL ES 2.0 specification.");
+            
             case Alpha8:
                 format = GL2ES2.GL_ALPHA;
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;                
@@ -149,10 +140,12 @@ public class TextureUtilGLES {
                 format = GL2ES2.GL_RGB;
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;
                 break;
+            case ABGR8:    
             case BGR8:
                 format = GL2ES2.GL_RGB;
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;
                 break;
+            
             case RGBA8:
                 format = GL2ES2.GL_RGBA;                
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;

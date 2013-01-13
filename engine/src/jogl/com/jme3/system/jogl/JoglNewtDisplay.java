@@ -59,6 +59,9 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
     }
 
     protected void createGLFrame(){
+    	
+    	logger.info("-------- createGLFrame");
+    	
         canvas.setTitle(settings.getTitle());
         
         applySettings(settings);
@@ -119,6 +122,7 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
          * forcing the creation of this resource is necessary
          */
         screen.addReference();
+
         if (settings.isFullscreen()) {
             List<ScreenMode> screenModes = screen.getScreenModes();
             //the resolution is provided by the user
@@ -148,7 +152,8 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
 
         startGLCanvas();
     }
-
+    
+    //
     public void init(GLAutoDrawable drawable){
         // prevent initializing twice on restart
         if (!wasInited){
@@ -157,7 +162,7 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
             canvas.requestFocus();
 
             super.internalCreate();
-            logger.info("Display created.");
+            logger.info("-------- init.");
 
             renderer.initialize();
             listener.initialize();
@@ -193,6 +198,7 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
      * Callback.
      */
     public void display(GLAutoDrawable drawable) {
+    	logger.info("--- display");
         if (needClose.get()) {
             listener.destroy();
             animator.stop();

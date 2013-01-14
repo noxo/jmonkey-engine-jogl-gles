@@ -193,36 +193,9 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		fragTextureUnits = intBuf16.get(0);
 		logger.log(Level.INFO, "Texture Units: {0}", fragTextureUnits);
 
-		// Multiply vector count by 4 to get float count.
-		gl.glGetIntegerv(GL2ES2.GL_MAX_VERTEX_UNIFORM_VECTORS, intBuf16);
-		vertexUniforms = intBuf16.get(0) * 4;
-		logger.log(Level.FINER, "Vertex Uniforms: {0}", vertexUniforms);
-
-		gl.glGetIntegerv(GL2ES2.GL_MAX_FRAGMENT_UNIFORM_VECTORS, intBuf16);
-		fragUniforms = intBuf16.get(0) * 4;
-		logger.log(Level.FINER, "Fragment Uniforms: {0}", fragUniforms);
-
-		gl.glGetIntegerv(GL2ES2.GL_MAX_VARYING_VECTORS, intBuf16);
-		int varyingFloats = intBuf16.get(0) * 4;
-		logger.log(Level.FINER, "Varying Floats: {0}", varyingFloats);
-
-		gl.glGetIntegerv(GL2ES2.GL_MAX_VERTEX_ATTRIBS, intBuf16);
-		vertexAttribs = intBuf16.get(0);
-		logger.log(Level.INFO, "Vertex Attributes: {0}", vertexAttribs);
-
 		gl.glGetIntegerv(GL2ES2.GL_SUBPIXEL_BITS, intBuf16);
 		int subpixelBits = intBuf16.get(0);
 		logger.log(Level.INFO, "Subpixel Bits: {0}", subpixelBits);
-
-		// GLES10.glGetIntegerv(GLES10.GL_MAX_ELEMENTS_VERTICES, intBuf16);
-		// maxVertCount = intBuf16.get(0);
-		// logger.log(Level.FINER, "Preferred Batch Vertex Count: {0}",
-		// maxVertCount);
-		//
-		// GLES10.glGetIntegerv(GLES10.GL_MAX_ELEMENTS_INDICES, intBuf16);
-		// maxTriCount = intBuf16.get(0);
-		// logger.log(Level.FINER, "Preferred Batch Index Count: {0}",
-		// maxTriCount);
 
 		gl.glGetIntegerv(GL2ES2.GL_MAX_TEXTURE_SIZE, intBuf16);
 		maxTexSize = intBuf16.get(0);
@@ -307,7 +280,7 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		applyRenderState(RenderState.DEFAULT);
 		gl.glDisable(GL2ES2.GL_DITHER);
 
-		useVBO = false;
+		useVBO = true;
 
 		// NOTE: SDK_INT is only available since 1.6,
 		// but for jME3 it doesn't matter since android versions 1.5 and below

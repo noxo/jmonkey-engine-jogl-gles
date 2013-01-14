@@ -134,6 +134,8 @@ public abstract class JmeSystemDelegate {
     private boolean is64Bit(String arch) {
         if (arch.equals("x86")) {
             return false;
+        } else if (arch.equals("arm")) {
+            return false;
         } else if (arch.equals("amd64")) {
             return true;
         } else if (arch.equals("x86_64")) {

@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.media.opengl.GL2ES1;
 import javax.media.opengl.GL2ES2;
 import javax.media.opengl.GLContext;
 
@@ -280,7 +279,7 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		applyRenderState(RenderState.DEFAULT);
 		gl.glDisable(GL2ES2.GL_DITHER);
 
-		useVBO = true;
+		useVBO = false;
 
 		// NOTE: SDK_INT is only available since 1.6,
 		// but for jME3 it doesn't matter since android versions 1.5 and below
@@ -2020,18 +2019,18 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 
 	public void renderMesh(Mesh mesh, int lod, int count) {
 		
-		GL2ES1 gles1 = GLContext.getCurrentGL().getGL2ES1();
-		GL2ES2 gles2 = getGL();
-		
-		if (context.pointSize != mesh.getPointSize()) {
-			System.out.println("------render mesh GLES1");
-			gles1.glPointSize(mesh.getPointSize());
-			context.pointSize = mesh.getPointSize();
-		}
-		if (context.lineWidth != mesh.getLineWidth()) {
-			gles2.glLineWidth(mesh.getLineWidth());
-			context.lineWidth = mesh.getLineWidth();
-		}
+//		GL2ES1 gles1 = GLContext.getCurrentGL().getGL2ES1();
+//		GL2ES2 gles2 = getGL();
+//		
+//		if (context.pointSize != mesh.getPointSize()) {
+//			System.out.println("------render mesh GLES1");
+//			gles1.glPointSize(mesh.getPointSize());
+//			context.pointSize = mesh.getPointSize();
+//		}
+//		if (context.lineWidth != mesh.getLineWidth()) {
+//			gles2.glLineWidth(mesh.getLineWidth());
+//			context.lineWidth = mesh.getLineWidth();
+//		}
 
 		statistics.onMeshDrawn(mesh, lod);
 		// if (GLContext.getCapabilities().GL_ARB_vertex_array_object){

@@ -198,8 +198,8 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
      * Callback.
      */
     public void display(GLAutoDrawable drawable) {
-    	logger.info("--- display");
-        if (needClose.get()) {
+
+    	if (needClose.get()) {
             listener.destroy();
             animator.stop();
             if (settings.isFullscreen()) {

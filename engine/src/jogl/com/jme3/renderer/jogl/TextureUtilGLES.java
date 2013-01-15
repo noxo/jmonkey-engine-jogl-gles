@@ -140,7 +140,14 @@ public class TextureUtilGLES {
                 format = GL2ES2.GL_RGB;
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;
                 break;
-            case ABGR8:    
+
+            case ABGR8:
+            	// not support by GLES2 convert to RGBA
+            	ABGRtoRGBA(data);
+                format = GL2ES2.GL_RGBA;                
+                dataType = GL2ES2.GL_UNSIGNED_BYTE;
+                break;
+            	
             case BGR8:
                 format = GL2ES2.GL_RGB;
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;
@@ -150,6 +157,7 @@ public class TextureUtilGLES {
                 format = GL2ES2.GL_RGBA;                
                 dataType = GL2ES2.GL_UNSIGNED_BYTE;
                 break;
+                
             case Depth:
             case Depth16:
             case Depth24:
@@ -238,5 +246,23 @@ public class TextureUtilGLES {
 
             pos += mipSizes[i];
         }
+    }
+    
+    static void ABGRtoRGBA(ByteBuffer buffer){
+    	 
+    	for (int i=0;i<buffer.capacity();i++) {
+    	
+    		int a = buffer.get(i++);  
+    		int b = buffer.get(i++);
+    		int g = buffer.get(i++);
+    		int r = buffer.get(i);
+    		
+    		buffer.put(i-3, (byte) r);
+    		buffer.put(i-2, (byte) g);
+    		buffer.put(i-1, (byte) b);
+    		buffer.put(i, (byte) a);
+ 
+    	}
+    	
     }
 }

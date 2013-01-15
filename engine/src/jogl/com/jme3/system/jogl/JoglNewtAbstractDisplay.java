@@ -83,12 +83,6 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
 
 		if (embedded) {
 	        caps = new GLCapabilities(GLProfile.get(GLProfile.GL2ES2));
-	        caps.setBackgroundOpaque(false);
-			caps.setHardwareAccelerated(true);
-			caps.setDoubleBuffered(true);
-			caps.setStencilBits(settings.getStencilBits());
-			caps.setDepthBits(settings.getDepthBits());
-
 		} else {
 			
 			caps = new GLCapabilities(GLProfile.getMaxFixedFunc(true));

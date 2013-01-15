@@ -279,7 +279,7 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		applyRenderState(RenderState.DEFAULT);
 		gl.glDisable(GL2ES2.GL_DITHER);
 
-		useVBO = false;
+		useVBO = true;
 
 		// NOTE: SDK_INT is only available since 1.6,
 		// but for jME3 it doesn't matter since android versions 1.5 and below
@@ -779,7 +779,7 @@ public class JoglRendererGLES2 implements WrappedJoglRenderer {
 		codeBuf.put(sourceCodeData);
 		codeBuf.flip();
 
-		String[] vlines = new String[] { source.getSource() };
+		String[] vlines = new String[] { source.getDefines() + source.getSource() };
 		int[] vlengths = new int[] { vlines[0].length() };
 		gl.glShaderSource(id, vlines.length, vlines, vlengths, 0);
 

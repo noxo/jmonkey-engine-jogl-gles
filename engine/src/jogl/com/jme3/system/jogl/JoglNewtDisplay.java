@@ -143,6 +143,9 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
                              currentScreenMode.getRotatedHeight(),
                              currentScreenMode.getMonitorMode().getSurfaceSize().getBitsPerPixel(),
                              currentScreenMode.getMonitorMode().getRefreshRate()});
+    
+        canvas.setPosition(screen.getWidth()/2-canvas.getWidth()/2, 
+        		screen.getHeight()/2-canvas.getHeight()/2);
     }
 
     private void privateInit(){

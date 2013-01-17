@@ -32,6 +32,7 @@
 
 package com.jme3.system.jogl;
 
+import com.jme3.input.jogl.LinuxEventDeviceTracker;
 import com.jme3.system.AppSettings;
 import com.jogamp.newt.Screen;
 import com.jogamp.newt.ScreenMode;
@@ -52,8 +53,10 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
     protected AtomicBoolean windowCloseRequest = new AtomicBoolean(false);
     protected AtomicBoolean needClose = new AtomicBoolean(false);
     protected AtomicBoolean needRestart = new AtomicBoolean(false);
+    
     protected volatile boolean wasInited = false;
-
+    private LinuxEventDeviceTracker keyboardTracker = new LinuxEventDeviceTracker();
+    
     public Type getType() {
         return Type.Display;
     }
@@ -105,6 +108,12 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
                 active.set(false);
             }
         });
+
+        canvas.addWindowListener(keyboardTracker);
+        
+        if (java.awt.GraphicsEnvironment.isHeadless())
+        	keyboardTracker.start();
+        
         canvas.setSize(settings.getWidth(), settings.getHeight());
         canvas.setUndecorated(settings.isFullscreen());
         canvas.setFullscreen(settings.isFullscreen());
@@ -177,6 +186,7 @@ public class JoglNewtDisplay extends JoglNewtAbstractDisplay {
     }
 
     public void destroy(boolean waitFor){
+    	keyboardTracker.start();
         needClose.set(true);
         if (waitFor){
             waitFor(false);

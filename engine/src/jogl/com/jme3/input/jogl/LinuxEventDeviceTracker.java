@@ -38,6 +38,7 @@ import java.util.logging.Logger;
 
 import jogamp.newt.WindowImpl;
 
+import com.jogamp.common.nio.StructAccessor;
 import com.jogamp.newt.event.InputEvent;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.event.WindowListener;
@@ -71,13 +72,14 @@ public class LinuxEventDeviceTracker implements WindowListener {
 	private volatile boolean stop = false;
 	private WindowImpl focusedWindow = null;
 	private String dev = null;
-//	private EventDevicePoller eventDevicePoller = new EventDevicePoller();
+	private EventDevicePoller eventDevicePoller = new EventDevicePoller();
 	
 	private Thread thread;
 
 	public void start() {
 		stop = false;
-		thread = new Thread("NEWT-LinuxEventDeviceTracker");
+		
+		thread = new Thread(eventDevicePoller);
 		thread.setDaemon(true);
 		thread.start();
 		logger.info("started");
@@ -102,6 +104,7 @@ public class LinuxEventDeviceTracker implements WindowListener {
 
 	@Override
 	public void windowDestroyNotify(WindowEvent e) {
+		logger.info("windowDestroyNotify");
 		Object s = e.getSource();
 		if(focusedWindow == s) {
 			focusedWindow = null;
@@ -113,6 +116,7 @@ public class LinuxEventDeviceTracker implements WindowListener {
 
 	@Override
 	public void windowGainedFocus(WindowEvent e) {
+		logger.info("windowGainedFocus");
 		Object s = e.getSource();
 		if(s instanceof WindowImpl) {
 			focusedWindow = (WindowImpl) s;
@@ -121,6 +125,7 @@ public class LinuxEventDeviceTracker implements WindowListener {
 
 	@Override
 	public void windowLostFocus(WindowEvent e) {
+		logger.info("windowLostFocus");
 		Object s = e.getSource();
 		if(focusedWindow == s) {
 			focusedWindow = null;
@@ -157,7 +162,7 @@ public class LinuxEventDeviceTracker implements WindowListener {
 			 * };
 			 */
 			ByteBuffer bb = ByteBuffer.wrap(b);
-			//StructAccessor s = new StructAccessor(bb);
+			StructAccessor s = new StructAccessor(bb);
 			String dev = System.getProperty("inputdev");
 			logger.info("Using input dev=" + dev);
 			
@@ -200,17 +205,18 @@ public class LinuxEventDeviceTracker implements WindowListener {
 					}
 					
 					if(read<0) {
+						logger.info("EOF from input");
 						stop = true; // EOF of event device file !?
 					} else {
 						remaining -= read;
 					}
 				}
 
-				timeSeconds = bb.getInt(0);
-				timeSecondFraction = bb.getShort(4);
-				type = bb.getShort(8);
-				code = bb.getShort(10);
-				value = bb.getInt(12);
+				timeSeconds = s.getIntAt(0);
+				timeSecondFraction = s.getShortAt(4);
+				type = s.getShortAt(8);
+				code = s.getShortAt(10);
+				value = s.getIntAt(12);
 
 				if(null != focusedWindow) {
 					/*

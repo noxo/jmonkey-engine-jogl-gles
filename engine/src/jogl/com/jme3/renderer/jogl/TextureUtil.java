@@ -134,7 +134,7 @@ public class TextureUtil {
         setFormat(Format.RGB16F_to_RGB9E5, GL2.GL_RGB9_E5, GL.GL_RGB, GL.GL_HALF_FLOAT, false);
         
         // RGBA formats
-        setFormat(Format.ABGR8,   GL.GL_RGBA8,       GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_BYTE, false);
+        setFormat(Format.ABGR8,   GL.GL_RGBA,        GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, false);
         setFormat(Format.RGB5A1,    GL.GL_RGB5_A1,   GL.GL_RGBA,        GL.GL_UNSIGNED_SHORT_5_5_5_1, false);
         setFormat(Format.ARGB4444,  GL.GL_RGBA4,     GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_SHORT_4_4_4_4, false);
         setFormat(Format.RGBA8,   GL.GL_RGBA8,       GL.GL_RGBA,        GL.GL_UNSIGNED_BYTE, false);
@@ -157,9 +157,9 @@ public class TextureUtil {
         GL gl = GLContext.getCurrentGL();
         switch (fmt){
             case ABGR8:
-                if (!gl.isExtensionAvailable("GL_EXT_abgr")){
-                    return null;
-                }
+//                if (!gl.isExtensionAvailable("GL_EXT_abgr")){
+//                    return null;
+//                }
                 break;
             case BGR8:
                 if (!gl.isExtensionAvailable("GL_VERSION_1_2") && !gl.isExtensionAvailable("EXT_bgra")){
@@ -236,13 +236,25 @@ public class TextureUtil {
         }
         return glFmt;
     }
-
+    
+    private static GL2ES2 getGL2ES2() {
+    	GL gl = GLContext.getCurrentGL();
+    	
+    	if (gl.isGL2ES2())
+    		return gl.getGL2ES2();
+    	else
+    		return gl.getGL2GL3();
+    }
+    
     public static void uploadTexture(Image image,
                                      int target,
                                      int index,
                                      int border){
-        GL gl = GLContext.getCurrentGL();
+        GL2ES2 gl = getGL2ES2();
         Image.Format fmt = image.getFormat();
+        
+        boolean abgrHack = fmt == Image.Format.ABGR8;
+        	
         GLImageFormat glFmt = getImageFormatWithError(fmt);
 
         ByteBuffer data;
@@ -251,7 +263,11 @@ public class TextureUtil {
         }else{
             data = null;
         }
-
+        
+        if (abgrHack) {
+        	ABGRtoRGBA(data);
+        }
+        
         int width = image.getWidth();
         int height = image.getHeight();
         int depth = image.getDepth();
@@ -285,7 +301,7 @@ public class TextureUtil {
             
             if (glFmt.compressed && data != null){
                 if (target == GL2.GL_TEXTURE_3D){
-                    gl.getGL2().glCompressedTexImage3D(target,
+                	gl.glCompressedTexImage3D(target,
                                                 i,
                                                 glFmt.internalFormat,
                                                 mipWidth,
@@ -296,7 +312,7 @@ public class TextureUtil {
                                                 data);
                 }else{
                     //all other targets use 2D: array, cubemap, 2d
-                    gl.getGL2().glCompressedTexImage2D(target,
+                    gl.glCompressedTexImage2D(target,
                                                 i,
                                                 glFmt.internalFormat,
                                                 mipWidth,
@@ -307,7 +323,7 @@ public class TextureUtil {
                 }
             }else{
                 if (target == GL2.GL_TEXTURE_3D){
-                    gl.getGL2().glTexImage3D(target,
+                    gl.glTexImage3D(target,
                                       i,
                                       glFmt.internalFormat,
                                       mipWidth,
@@ -321,7 +337,7 @@ public class TextureUtil {
                     // prepare data for 2D array
                     // or upload slice
                     if (index == -1){
-                        gl.getGL2().glTexImage3D(target,
+                        gl.glTexImage3D(target,
                                           0,
                                           glFmt.internalFormat,
                                           mipWidth,
@@ -332,7 +348,7 @@ public class TextureUtil {
                                           glFmt.dataType,
                                           data);
                     }else{
-                        gl.getGL2().glTexSubImage3D(target,
+                        gl.glTexSubImage3D(target,
                                              i, // level
                                              0, // xoffset
                                              0, // yoffset
@@ -350,7 +366,7 @@ public class TextureUtil {
                             throw new IllegalStateException("Cannot update multisample textures");
                         }
 
-                        gl.getGL2().glTexSubImage2D(target,
+                        gl.glTexSubImage2D(target,
                                              i,
                                              0, 0,
                                              mipWidth, mipHeight,
@@ -358,15 +374,21 @@ public class TextureUtil {
                                              glFmt.dataType,
                                              data);
                     }else{
+                    	
+                    	GL currentGL = GLContext.getCurrentGL();
+                    	
                         if (samples > 1){
-                            gl.getGL2().glTexImage2DMultisample(target,
+                        	if (currentGL.isGL2ES2())
+                        		System.out.println("trying to call glTexImage2DMultisample on GLES2");
+                        	
+                            currentGL.getGL2GL3().glTexImage2DMultisample(target,
                                                                           samples,
                                                                           glFmt.internalFormat,
                                                                           mipWidth,
                                                                           mipHeight,
                                                                           true);
                         }else{
-                            gl.getGL2().glTexImage2D(target,
+                            gl.glTexImage2D(target,
                                               i,
                                               glFmt.internalFormat,
                                               mipWidth,
@@ -382,5 +404,23 @@ public class TextureUtil {
             
             pos += mipSizes[i];
         }
+    }
+    
+    static void ABGRtoRGBA(ByteBuffer buffer){
+   	 
+    	for (int i=0;i<buffer.capacity();i++) {
+    	
+    		int a = buffer.get(i++);  
+    		int b = buffer.get(i++);
+    		int g = buffer.get(i++);
+    		int r = buffer.get(i);
+    		
+    		buffer.put(i-3, (byte) r);
+    		buffer.put(i-2, (byte) g);
+    		buffer.put(i-1, (byte) b);
+    		buffer.put(i, (byte) a);
+ 
+    	}
+    	
     }
 }

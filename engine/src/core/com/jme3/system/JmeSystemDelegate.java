@@ -146,7 +146,11 @@ public abstract class JmeSystemDelegate {
             return false;
         } else if (arch.equals("universal")) {
             return false;
-        } else {
+        } else if (arch.equals("arm")) {
+            return false;
+        } 
+        
+        else {
             throw new UnsupportedOperationException("Unsupported architecture: " + arch);
         }
     }

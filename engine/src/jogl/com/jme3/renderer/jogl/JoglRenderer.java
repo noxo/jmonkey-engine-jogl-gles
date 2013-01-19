@@ -137,7 +137,16 @@ public class JoglRenderer implements Renderer {
     public EnumSet<Caps> getCaps() {
         return caps;
     }
-
+    
+    private GL2ES2 getGLES2() {
+    	GL gl = GLContext.getCurrentGL();
+    	
+    	if (gl.isGL2ES2())
+    		return gl.getGL2ES2();
+    	else
+    		return gl.getGL2GL3();
+    }
+    
     public void initialize() {
         GL gl = GLContext.getCurrentGL();
         //logger.log(Level.INFO, "Vendor: {0}", gl.glGetString(GL.GL_VENDOR));
@@ -497,14 +506,17 @@ public class JoglRenderer implements Renderer {
 
     public void applyRenderState(RenderState state) {
         GL gl = GLContext.getCurrentGL();
-        if (state.isWireframe() && !context.wireframe) {
-            gl.getGL2GL3().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_LINE);
-            context.wireframe = true;
-        } else if (!state.isWireframe() && context.wireframe) {
-            gl.getGL2GL3().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
-            context.wireframe = false;
+        
+        if (!gl.isGL2ES2()) {
+	        if (state.isWireframe() && !context.wireframe) {
+	            gl.getGL2GL3().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_LINE);
+	            context.wireframe = true;
+	        } else if (!state.isWireframe() && context.wireframe) {
+	            gl.getGL2GL3().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+	            context.wireframe = false;
+	        }
         }
-
+        
         if (state.isDepthTest() && !context.depthTestEnabled) {
             gl.glEnable(GL.GL_DEPTH_TEST);
             gl.glDepthFunc(GL.GL_LEQUAL);
@@ -513,14 +525,16 @@ public class JoglRenderer implements Renderer {
             gl.glDisable(GL.GL_DEPTH_TEST);
             context.depthTestEnabled = false;
         }
-
-        if (state.isAlphaTest() && context.alphaTestFallOff == 0) {
-            gl.glEnable(GL2.GL_ALPHA_TEST);
-            gl.getGL2().glAlphaFunc(GL.GL_GREATER, state.getAlphaFallOff());
-            context.alphaTestFallOff = state.getAlphaFallOff();
-        } else if (!state.isAlphaTest() && context.alphaTestFallOff != 0) {
-            gl.glDisable(GL2.GL_ALPHA_TEST);
-            context.alphaTestFallOff = 0;
+        
+        if (!gl.isGL2ES2()) {
+	        if (state.isAlphaTest() && context.alphaTestFallOff == 0) {
+	            gl.glEnable(GL2.GL_ALPHA_TEST);
+	            gl.getGL2().glAlphaFunc(GL.GL_GREATER, state.getAlphaFallOff());
+	            context.alphaTestFallOff = state.getAlphaFallOff();
+	        } else if (!state.isAlphaTest() && context.alphaTestFallOff != 0) {
+	            gl.glDisable(GL2.GL_ALPHA_TEST);
+	            context.alphaTestFallOff = 0;
+	        }
         }
 
         if (state.isDepthWrite() && !context.depthWriteEnabled) {
@@ -1057,6 +1071,7 @@ public class JoglRenderer implements Renderer {
         boolean needRegister = false;
         if (id == -1) {
             // create program
+        	
             id = gl.getGL2GL3().glCreateProgram();
             if (id == 0) {
                 throw new RendererException("Invalid ID (" + id + ") received when trying to create shader program.");

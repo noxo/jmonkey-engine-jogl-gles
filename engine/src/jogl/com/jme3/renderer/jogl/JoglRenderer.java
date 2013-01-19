@@ -160,12 +160,14 @@ public class JoglRenderer implements Renderer {
         }
 
         String versionStr = null;
-        if (caps.contains(Caps.OpenGL20)) {
-            versionStr = gl.glGetString(GL2ES2.GL_SHADING_LANGUAGE_VERSION);
-        }
+        // Checking GLSL version should be enought, that also ensures we are running
+        // at least desktop with OpenGL 2.0
+        //if (caps.contains(Caps.OpenGL20)) {
+        versionStr = gl.glGetString(GL2ES2.GL_SHADING_LANGUAGE_VERSION);
+        //}
         if (versionStr == null || versionStr.equals("")) {
             glslVer = -1;
-            throw new UnsupportedOperationException("GLSL and OpenGL2 is " +
+            throw new UnsupportedOperationException("GLSL 1.x" +
              "required for the JOGL " +
              "renderer!");
         }

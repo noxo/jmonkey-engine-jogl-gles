@@ -552,28 +552,30 @@ public class JoglRenderer implements Renderer {
             gl.glColorMask(false, false, false, false);
             context.colorWriteEnabled = false;
         }
-
-        if (state.isPointSprite() && !context.pointSprite) {
-            // Only enable/disable sprite
-            if (context.boundTextures[0] != null) {
-                if (context.boundTextureUnit != 0) {
-                    gl.glActiveTexture(GL.GL_TEXTURE0);
-                    context.boundTextureUnit = 0;
-                }
-                gl.glEnable(GL2.GL_POINT_SPRITE);
-                gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
-            }
-            context.pointSprite = true;
-        } else if (!state.isPointSprite() && context.pointSprite) {
-            if (context.boundTextures[0] != null) {
-                if (context.boundTextureUnit != 0) {
-                    gl.glActiveTexture(GL.GL_TEXTURE0);
-                    context.boundTextureUnit = 0;
-                }
-                gl.glDisable(GL2.GL_POINT_SPRITE);
-                gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
-                context.pointSprite = false;
-            }
+        
+        if (!gl.isGL2ES2()) {
+	        if (state.isPointSprite() && !context.pointSprite) {
+	            // Only enable/disable sprite
+	            if (context.boundTextures[0] != null) {
+	                if (context.boundTextureUnit != 0) {
+	                    gl.glActiveTexture(GL.GL_TEXTURE0);
+	                    context.boundTextureUnit = 0;
+	                }
+	                gl.glEnable(GL2.GL_POINT_SPRITE);
+	                gl.glEnable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+	            }
+	            context.pointSprite = true;
+	        } else if (!state.isPointSprite() && context.pointSprite) {
+	            if (context.boundTextures[0] != null) {
+	                if (context.boundTextureUnit != 0) {
+	                    gl.glActiveTexture(GL.GL_TEXTURE0);
+	                    context.boundTextureUnit = 0;
+	                }
+	                gl.glDisable(GL2.GL_POINT_SPRITE);
+	                gl.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+	                context.pointSprite = false;
+	            }
+	        }
         }
 
         if (state.isPolyOffset()) {

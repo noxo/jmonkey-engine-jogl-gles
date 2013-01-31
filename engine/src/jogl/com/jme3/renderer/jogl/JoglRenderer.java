@@ -2458,7 +2458,10 @@ public class JoglRenderer implements Renderer {
         int id = mesh.getId();
         GL gl = GLContext.getCurrentGL();
         
-        if (!gl.isGL2ES2()) {
+        boolean VAOSupported = gl.isFunctionAvailable("glGenVertexArrays") &&
+                gl.isFunctionAvailable("glBindVertexArray");
+        
+        if ( VAOSupported ) {
 			if (id == -1) {
 				IntBuffer temp = intBuf1;
 				gl.getGL2GL3().glGenVertexArrays(1, temp);

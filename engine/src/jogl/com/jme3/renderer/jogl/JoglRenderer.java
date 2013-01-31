@@ -553,7 +553,7 @@ public class JoglRenderer implements Renderer {
             context.colorWriteEnabled = false;
         }
         
-        if (!gl.isGL2ES2()) {
+        if (gl.isGL2()) {
 	        if (state.isPointSprite() && !context.pointSprite) {
 	            // Only enable/disable sprite
 	            if (context.boundTextures[0] != null) {

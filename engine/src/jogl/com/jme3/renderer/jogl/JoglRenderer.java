@@ -2576,7 +2576,8 @@ public class JoglRenderer implements Renderer {
         }
 
         GL gl = GLContext.getCurrentGL();
-        if (!gl.isGL2ES2() && context.pointSprite && mesh.getMode() != Mode.Points) {
+        
+        if (gl.isGL2() && context.pointSprite && mesh.getMode() != Mode.Points) {
             // XXX: Hack, disable point sprite mode if mesh not in point mode
             if (context.boundTextures[0] != null) {
                 if (context.boundTextureUnit != 0) {
@@ -2589,7 +2590,9 @@ public class JoglRenderer implements Renderer {
             }
         }
 
-        if (!gl.isGL2ES2() && context.pointSize != mesh.getPointSize()) {
+        
+        if (gl.isFunctionAvailable("glPointSize") &&
+        		context.pointSize != mesh.getPointSize()) {
             gl.getGL2GL3().glPointSize(mesh.getPointSize());
             context.pointSize = mesh.getPointSize();
         }

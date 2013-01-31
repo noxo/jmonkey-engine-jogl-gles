@@ -507,7 +507,7 @@ public class JoglRenderer implements Renderer {
     public void applyRenderState(RenderState state) {
         GL gl = GLContext.getCurrentGL();
         
-        if (!gl.isGL2ES2()) {
+        if (gl.isGL2()) {
 	        if (state.isWireframe() && !context.wireframe) {
 	            gl.getGL2GL3().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_LINE);
 	            context.wireframe = true;
@@ -526,7 +526,7 @@ public class JoglRenderer implements Renderer {
             context.depthTestEnabled = false;
         }
         
-        if (!gl.isGL2ES2()) {
+        if (gl.isGL2()) {
 	        if (state.isAlphaTest() && context.alphaTestFallOff == 0) {
 	            gl.glEnable(GL2.GL_ALPHA_TEST);
 	            gl.getGL2().glAlphaFunc(GL.GL_GREATER, state.getAlphaFallOff());

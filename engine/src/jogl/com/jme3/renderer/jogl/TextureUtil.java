@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2ES2;
-import javax.media.opengl.GL3;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.GLContext;
 
 public class TextureUtil {
@@ -101,52 +101,52 @@ public class TextureUtil {
         // Luminance formats
         setFormat(Format.Luminance8,   GL2.GL_LUMINANCE8,  GL.GL_LUMINANCE, GL.GL_UNSIGNED_BYTE, false);
         setFormat(Format.Luminance16,  GL2.GL_LUMINANCE16, GL.GL_LUMINANCE, GL.GL_UNSIGNED_SHORT, false);
-        setFormat(Format.Luminance16F, GL2.GL_LUMINANCE16F_ARB, GL.GL_LUMINANCE, GL.GL_HALF_FLOAT, false);
+        setFormat(Format.Luminance16F, GL.GL_LUMINANCE16F_ARB, GL.GL_LUMINANCE, GL.GL_HALF_FLOAT, false);
         setFormat(Format.Luminance32F, GL.GL_LUMINANCE32F_ARB, GL.GL_LUMINANCE, GL.GL_FLOAT, false);
         
         // Luminance alpha formats
         setFormat(Format.Luminance8Alpha8, GL2.GL_LUMINANCE8_ALPHA8,  GL.GL_LUMINANCE_ALPHA, GL.GL_UNSIGNED_BYTE, false);
         setFormat(Format.Luminance16Alpha16, GL2.GL_LUMINANCE16_ALPHA16, GL.GL_LUMINANCE_ALPHA, GL.GL_UNSIGNED_SHORT, false);
-        setFormat(Format.Luminance16FAlpha16F, GL2.GL_LUMINANCE_ALPHA16F_ARB, GL2.GL_LUMINANCE_ALPHA, GL2.GL_HALF_FLOAT, false);
+        setFormat(Format.Luminance16FAlpha16F, GL.GL_LUMINANCE_ALPHA16F_ARB, GL.GL_LUMINANCE_ALPHA, GL.GL_HALF_FLOAT, false);
         
         // Depth formats
-        setFormat(Format.Depth,    GL2.GL_DEPTH_COMPONENT,    GL2.GL_DEPTH_COMPONENT, GL2.GL_UNSIGNED_BYTE, false);
-        setFormat(Format.Depth16,  GL2.GL_DEPTH_COMPONENT16,  GL2.GL_DEPTH_COMPONENT, GL2.GL_UNSIGNED_SHORT, false);
-        setFormat(Format.Depth24,  GL2.GL_DEPTH_COMPONENT24,  GL2.GL_DEPTH_COMPONENT, GL2.GL_UNSIGNED_INT, false);
-        setFormat(Format.Depth32,  GL2.GL_DEPTH_COMPONENT32,  GL2.GL_DEPTH_COMPONENT, GL2.GL_UNSIGNED_INT, false);
-        setFormat(Format.Depth32F, GL2.GL_DEPTH_COMPONENT32F, GL2.GL_DEPTH_COMPONENT, GL2.GL_FLOAT,         false);
+        setFormat(Format.Depth,    GL2ES2.GL_DEPTH_COMPONENT,    GL2ES2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_BYTE, false);
+        setFormat(Format.Depth16,  GL.GL_DEPTH_COMPONENT16,  GL2ES2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_SHORT, false);
+        setFormat(Format.Depth24,  GL.GL_DEPTH_COMPONENT24,  GL2ES2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_INT, false);
+        setFormat(Format.Depth32,  GL.GL_DEPTH_COMPONENT32,  GL2ES2.GL_DEPTH_COMPONENT, GL.GL_UNSIGNED_INT, false);
+        setFormat(Format.Depth32F, GL2GL3.GL_DEPTH_COMPONENT32F, GL2ES2.GL_DEPTH_COMPONENT, GL.GL_FLOAT,         false);
         
         // Depth stencil formats
-        setFormat(Format.Depth24Stencil8, GL3.GL_DEPTH24_STENCIL8, GL3.GL_DEPTH_STENCIL, GL3.GL_UNSIGNED_INT_24_8, false);
+        setFormat(Format.Depth24Stencil8, GL.GL_DEPTH24_STENCIL8, GL.GL_DEPTH_STENCIL, GL.GL_UNSIGNED_INT_24_8, false);
         
         // RGB formats
-        setFormat(Format.BGR8,       GL.GL_RGB8,  GL2.GL_BGR, GL.GL_UNSIGNED_BYTE, false);
+        setFormat(Format.BGR8,       GL.GL_RGB8,  GL2GL3.GL_BGR, GL.GL_UNSIGNED_BYTE, false);
         setFormat(Format.RGB8,       GL.GL_RGB8,  GL.GL_RGB,        GL.GL_UNSIGNED_BYTE, false);
 //        setFormat(Format.RGB10,      GL11.GL_RGB10, GL11.GL_RGB,        GL12.GL_UNSIGNED_INT_10_10_10_2, false); 
-        setFormat(Format.RGB16,      GL2.GL_RGB16, GL.GL_RGB,        GL.GL_UNSIGNED_SHORT, false); 
+        setFormat(Format.RGB16,      GL2GL3.GL_RGB16, GL.GL_RGB,        GL.GL_UNSIGNED_SHORT, false); 
         setFormat(Format.RGB16F,     GL2ES2.GL_RGB16F, GL.GL_RGB, GL.GL_HALF_FLOAT, false);
         setFormat(Format.RGB32F,     GL.GL_RGB32F, GL.GL_RGB, GL.GL_FLOAT, false);
         
         // Special RGB formats
-        setFormat(Format.RGB111110F, GL2.GL_R11F_G11F_B10F,    GL.GL_RGB, GL.GL_UNSIGNED_INT_10F_11F_11F_REV, false);
-        setFormat(Format.RGB9E5,     GL2.GL_RGB9_E5, GL.GL_RGB, GL2.GL_UNSIGNED_INT_5_9_9_9_REV, false);
-        setFormat(Format.RGB16F_to_RGB111110F, GL2.GL_R11F_G11F_B10F,    GL.GL_RGB, GL.GL_HALF_FLOAT, false);
+        setFormat(Format.RGB111110F, GL.GL_R11F_G11F_B10F,    GL.GL_RGB, GL.GL_UNSIGNED_INT_10F_11F_11F_REV, false);
+        setFormat(Format.RGB9E5,     GL2GL3.GL_RGB9_E5, GL.GL_RGB, GL2GL3.GL_UNSIGNED_INT_5_9_9_9_REV, false);
+        setFormat(Format.RGB16F_to_RGB111110F, GL.GL_R11F_G11F_B10F,    GL.GL_RGB, GL.GL_HALF_FLOAT, false);
         setFormat(Format.RGB16F_to_RGB9E5, GL2.GL_RGB9_E5, GL.GL_RGB, GL.GL_HALF_FLOAT, false);
         
         // RGBA formats
-        setFormat(Format.ABGR8,   GL.GL_RGBA,        GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, false);
+        setFormat(Format.ABGR8,   GL.GL_RGBA8,       GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_BYTE, false);
         setFormat(Format.RGB5A1,    GL.GL_RGB5_A1,   GL.GL_RGBA,        GL.GL_UNSIGNED_SHORT_5_5_5_1, false);
         setFormat(Format.ARGB4444,  GL.GL_RGBA4,     GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_SHORT_4_4_4_4, false);
         setFormat(Format.RGBA8,   GL.GL_RGBA8,       GL.GL_RGBA,        GL.GL_UNSIGNED_BYTE, false);
-        setFormat(Format.RGBA16,  GL2.GL_RGBA16,      GL.GL_RGBA,        GL.GL_UNSIGNED_SHORT, false); // might be incorrect
-        setFormat(Format.RGBA16F, GL2.GL_RGBA16F, GL.GL_RGBA, GL.GL_HALF_FLOAT, false);
+        setFormat(Format.RGBA16,  GL2GL3.GL_RGBA16,      GL.GL_RGBA,        GL.GL_UNSIGNED_SHORT, false); // might be incorrect
+        setFormat(Format.RGBA16F, GL2ES2.GL_RGBA16F, GL.GL_RGBA, GL.GL_HALF_FLOAT, false);
         setFormat(Format.RGBA32F, GL.GL_RGBA32F, GL.GL_RGBA, GL.GL_FLOAT, false);
         
         // DXT formats
-        setFormat(Format.DXT1,  GL.GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL.GL_RGB,   GL2.GL_UNSIGNED_BYTE, true);
-        setFormat(Format.DXT1A, GL.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, GL.GL_RGBA, GL2.GL_UNSIGNED_BYTE, true);
-        setFormat(Format.DXT3,  GL.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, GL.GL_RGBA, GL2.GL_UNSIGNED_BYTE, true);
-        setFormat(Format.DXT5,  GL.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, GL.GL_RGBA, GL2.GL_UNSIGNED_BYTE, true);
+        setFormat(Format.DXT1,  GL.GL_COMPRESSED_RGB_S3TC_DXT1_EXT, GL.GL_RGB,   GL.GL_UNSIGNED_BYTE, true);
+        setFormat(Format.DXT1A, GL.GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, true);
+        setFormat(Format.DXT3,  GL.GL_COMPRESSED_RGBA_S3TC_DXT3_EXT, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, true);
+        setFormat(Format.DXT5,  GL.GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, true);
     
         // LTC/LATC/3Dc formats
         setFormat(Format.LTC,  GL2.GL_COMPRESSED_LUMINANCE_LATC1_EXT,       GL.GL_LUMINANCE,       GL.GL_UNSIGNED_BYTE, true);
@@ -157,9 +157,9 @@ public class TextureUtil {
         GL gl = GLContext.getCurrentGL();
         switch (fmt){
             case ABGR8:
-//                if (!gl.isExtensionAvailable("GL_EXT_abgr")){
-//                    return null;
-//                }
+                if (!gl.isExtensionAvailable("GL_EXT_abgr")){
+                    return null;
+                }
                 break;
             case BGR8:
                 if (!gl.isExtensionAvailable("GL_VERSION_1_2") && !gl.isExtensionAvailable("EXT_bgra")){
@@ -236,25 +236,13 @@ public class TextureUtil {
         }
         return glFmt;
     }
-    
-    private static GL2ES2 getGL2ES2() {
-    	GL gl = GLContext.getCurrentGL();
-    	
-    	if (gl.isGL2ES2())
-    		return gl.getGL2ES2();
-    	else
-    		return gl.getGL2GL3();
-    }
-    
+
     public static void uploadTexture(Image image,
                                      int target,
                                      int index,
                                      int border){
-        GL2ES2 gl = getGL2ES2();
+        GL gl = GLContext.getCurrentGL();
         Image.Format fmt = image.getFormat();
-        
-        boolean abgrHack = fmt == Image.Format.ABGR8;
-        	
         GLImageFormat glFmt = getImageFormatWithError(fmt);
 
         ByteBuffer data;
@@ -263,11 +251,7 @@ public class TextureUtil {
         }else{
             data = null;
         }
-        
-        if (abgrHack) {
-        	ABGRtoRGBA(data);
-        }
-        
+
         int width = image.getWidth();
         int height = image.getHeight();
         int depth = image.getDepth();
@@ -300,8 +284,8 @@ public class TextureUtil {
             }
             
             if (glFmt.compressed && data != null){
-                if (target == GL2.GL_TEXTURE_3D){
-                	gl.glCompressedTexImage3D(target,
+                if (target == GL2ES2.GL_TEXTURE_3D){
+                    gl.getGL2ES2().glCompressedTexImage3D(target,
                                                 i,
                                                 glFmt.internalFormat,
                                                 mipWidth,
@@ -322,8 +306,8 @@ public class TextureUtil {
                                                 data);
                 }
             }else{
-                if (target == GL2.GL_TEXTURE_3D){
-                    gl.glTexImage3D(target,
+                if (target == GL2ES2.GL_TEXTURE_3D){
+                    gl.getGL2ES2().glTexImage3D(target,
                                       i,
                                       glFmt.internalFormat,
                                       mipWidth,
@@ -337,7 +321,7 @@ public class TextureUtil {
                     // prepare data for 2D array
                     // or upload slice
                     if (index == -1){
-                        gl.glTexImage3D(target,
+                        gl.getGL2ES2().glTexImage3D(target,
                                           0,
                                           glFmt.internalFormat,
                                           mipWidth,
@@ -348,7 +332,7 @@ public class TextureUtil {
                                           glFmt.dataType,
                                           data);
                     }else{
-                        gl.glTexSubImage3D(target,
+                        gl.getGL2ES2().glTexSubImage3D(target,
                                              i, // level
                                              0, // xoffset
                                              0, // yoffset
@@ -374,20 +358,16 @@ public class TextureUtil {
                                              glFmt.dataType,
                                              data);
                     }else{
-                    	
-                    	GL currentGL = GLContext.getCurrentGL();
-                    	
                         if (samples > 1){
-                        	if (currentGL.isGL2ES2())
-                        		System.out.println("trying to call glTexImage2DMultisample on GLES2");
-                        	
-                            currentGL.getGL2GL3().glTexImage2DMultisample(target,
-                                                                          samples,
-                                                                          glFmt.internalFormat,
-                                                                          mipWidth,
-                                                                          mipHeight,
-                                                                          true);
-                        }else{
+                            if (gl.isGL2GL3()) {
+                                gl.getGL2GL3().glTexImage2DMultisample(target,
+                                        samples,
+                                        glFmt.internalFormat,
+                                        mipWidth,
+                                        mipHeight,
+                                        true);
+                            }
+                        } else {
                             gl.glTexImage2D(target,
                                               i,
                                               glFmt.internalFormat,
@@ -404,23 +384,5 @@ public class TextureUtil {
             
             pos += mipSizes[i];
         }
-    }
-    
-    static void ABGRtoRGBA(ByteBuffer buffer){
-   	 
-    	for (int i=0;i<buffer.capacity();i++) {
-    	
-    		int a = buffer.get(i++);  
-    		int b = buffer.get(i++);
-    		int g = buffer.get(i++);
-    		int r = buffer.get(i);
-    		
-    		buffer.put(i-3, (byte) r);
-    		buffer.put(i-2, (byte) g);
-    		buffer.put(i-1, (byte) b);
-    		buffer.put(i, (byte) a);
- 
-    	}
-    	
     }
 }

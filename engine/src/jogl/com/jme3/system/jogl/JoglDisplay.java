@@ -223,7 +223,7 @@ public class JoglDisplay extends JoglAbstractDisplay {
             }
         });
 
-        logger.log(Level.INFO, "Selected display mode: {0}x{1}x{2} @{3}",
+        logger.log(Level.FINE, "Selected display mode: {0}x{1}x{2} @{3}",
                 new Object[]{gd.getDisplayMode().getWidth(),
                              gd.getDisplayMode().getHeight(),
                              gd.getDisplayMode().getBitDepth(),
@@ -246,7 +246,7 @@ public class JoglDisplay extends JoglAbstractDisplay {
             canvas.requestFocus();
 
             super.internalCreate();
-            logger.info("Display created.");
+            logger.fine("Display created.");
 
             renderer.initialize();
             listener.initialize();
@@ -312,7 +312,7 @@ public class JoglDisplay extends JoglAbstractDisplay {
                 device.setFullScreenWindow(null);
             }
             frame.dispose();
-            logger.info("Display destroyed.");
+            logger.fine("Display destroyed.");
             super.internalDestroy();
             return;
         }

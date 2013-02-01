@@ -75,11 +75,7 @@ public abstract class JoglNewtAbstractDisplay extends JoglContext implements GLE
     protected void initGLCanvas() {
         //FIXME use the settings to know whether to use the max programmable profile
         //then call GLProfile.getMaxProgrammable(true);
-    	
-        GLCapabilities caps = new GLCapabilities(GLProfile.getDefault());
-        
-        //GLCapabilities caps = new GLCapabilities(GLProfile.getMaxFixedFunc(true));
-        
+        GLCapabilities caps = new GLCapabilities(GLProfile.getMaxFixedFunc(true));
         caps.setHardwareAccelerated(true);
         caps.setDoubleBuffered(true);
         caps.setStencilBits(settings.getStencilBits());

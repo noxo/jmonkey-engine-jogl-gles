@@ -81,7 +81,7 @@ public class JoglOffscreenBuffer extends JoglContext implements Runnable {
         
         renderable.set(true);
         
-        logger.info("Offscreen buffer created.");
+        logger.fine("Offscreen buffer created.");
         
         super.internalCreate();
         listener.initialize();
@@ -115,13 +115,13 @@ public class JoglOffscreenBuffer extends JoglContext implements Runnable {
         listener.destroy();
         renderer.cleanup();
         offscreenDrawable.destroy();
-        logger.info("Offscreen buffer destroyed.");
+        logger.fine("Offscreen buffer destroyed.");
         
         super.internalDestroy();
     }
 
     public void run(){
-        logger.log(Level.INFO, "Using JOGL {0}", NewtVersion.getInstance().getImplementationVersion());
+        logger.log(Level.FINE, "Using JOGL {0}", NewtVersion.getInstance().getImplementationVersion());
         initInThread();
         while (!needClose.get()){
             runLoop();

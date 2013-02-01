@@ -198,7 +198,7 @@ public class JoalAudioRenderer implements AudioRenderer, Runnable {
 
             logger.log(Level.FINE, "AudioRenderer supports {0} channels", channels.length);
 
-            supportEfx = alc.alcIsExtensionPresent(device, "ALC_EXT_EFX");
+            supportEfx = false; //alc.alcIsExtensionPresent(device, "ALC_EXT_EFX");
             if (supportEfx) {
                 ib.position(0).limit(1);
                 alc.alcGetIntegerv(device, AL.ALC_EFX_MAJOR_VERSION, 1, ib);

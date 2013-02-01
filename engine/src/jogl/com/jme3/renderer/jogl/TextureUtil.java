@@ -134,7 +134,8 @@ public class TextureUtil {
         setFormat(Format.RGB16F_to_RGB9E5, GL2.GL_RGB9_E5, GL.GL_RGB, GL.GL_HALF_FLOAT, false);
         
         // RGBA formats
-        setFormat(Format.ABGR8,   GL.GL_RGBA8,       GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_BYTE, false);
+        setFormat(Format.ABGR8,   GL.GL_RGBA,        GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, false);
+//        setFormat(Format.ABGR8,   GL.GL_RGBA8,       GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_BYTE, false);
         setFormat(Format.RGB5A1,    GL.GL_RGB5_A1,   GL.GL_RGBA,        GL.GL_UNSIGNED_SHORT_5_5_5_1, false);
         setFormat(Format.ARGB4444,  GL.GL_RGBA4,     GL2.GL_ABGR_EXT, GL.GL_UNSIGNED_SHORT_4_4_4_4, false);
         setFormat(Format.RGBA8,   GL.GL_RGBA8,       GL.GL_RGBA,        GL.GL_UNSIGNED_BYTE, false);
@@ -157,9 +158,9 @@ public class TextureUtil {
         GL gl = GLContext.getCurrentGL();
         switch (fmt){
             case ABGR8:
-                if (!gl.isExtensionAvailable("GL_EXT_abgr")){
-                    return null;
-                }
+//                if (!gl.isExtensionAvailable("GL_EXT_abgr")){
+//                    return null;
+//                }
                 break;
             case BGR8:
                 if (!gl.isExtensionAvailable("GL_VERSION_1_2") && !gl.isExtensionAvailable("EXT_bgra")){
@@ -241,8 +242,12 @@ public class TextureUtil {
                                      int target,
                                      int index,
                                      int border){
+    	
         GL gl = GLContext.getCurrentGL();
         Image.Format fmt = image.getFormat();
+        
+        boolean abgrHack = fmt == Image.Format.ABGR8;
+        
         GLImageFormat glFmt = getImageFormatWithError(fmt);
 
         ByteBuffer data;
@@ -251,7 +256,11 @@ public class TextureUtil {
         }else{
             data = null;
         }
-
+        
+        if (abgrHack) {
+        	ABGRtoRGBA(data);
+        }
+        
         int width = image.getWidth();
         int height = image.getHeight();
         int depth = image.getDepth();
@@ -384,5 +393,23 @@ public class TextureUtil {
             
             pos += mipSizes[i];
         }
+    }
+    
+    static void ABGRtoRGBA(ByteBuffer buffer){
+      	 
+    	for (int i=0;i<buffer.capacity();i++) {
+    	
+    		int a = buffer.get(i++);  
+    		int b = buffer.get(i++);
+    		int g = buffer.get(i++);
+    		int r = buffer.get(i);
+    		
+    		buffer.put(i-3, (byte) r);
+    		buffer.put(i-2, (byte) g);
+    		buffer.put(i-1, (byte) b);
+    		buffer.put(i, (byte) a);
+ 
+    	}
+    	
     }
 }

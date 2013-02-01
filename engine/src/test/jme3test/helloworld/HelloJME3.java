@@ -38,7 +38,6 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
-import com.jme3.system.AppSettings;
 
 /** Sample 1 - how to get started with the most simple JME 3 application.
  * Display a blue 3D cube and view from all sides by
@@ -47,14 +46,6 @@ public class HelloJME3 extends SimpleApplication {
 
     public static void main(String[] args){
         HelloJME3 app = new HelloJME3();
-       
-        AppSettings settings = new AppSettings(true);
-        settings.setResolution(640,480);
-        settings.setRenderer("JOGL");
-        settings.setAudioRenderer("JOAL");
-        app.setShowSettings(false);
-        app.setSettings(settings);
-       
         app.start(); // start the game
     }
 
@@ -67,6 +58,5 @@ public class HelloJME3 extends SimpleApplication {
         mat.setColor("Color", ColorRGBA.Blue);   // set color of material to blue
         geom.setMaterial(mat);                   // set the cube's material
         rootNode.attachChild(geom);              // make the cube appear in the scene
-        //context.getSettings().setRenderer("JOGL");
     }
 }

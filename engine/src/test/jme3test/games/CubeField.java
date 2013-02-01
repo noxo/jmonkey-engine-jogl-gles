@@ -48,8 +48,6 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Dome;
-import com.jme3.system.AppSettings;
-
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,15 +59,6 @@ public class CubeField extends SimpleApplication implements AnalogListener {
 
     public static void main(String[] args) {
         CubeField app = new CubeField();
-        
-        AppSettings settings = new AppSettings(true);
-        settings.setResolution(640,480);
-        settings.setRenderer("JOGL");
-        settings.setAudioRenderer("JOAL");
-        app.setShowSettings(false);
-        app.setSettings(settings);
-
-        
         app.start();
     }
 

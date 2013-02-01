@@ -45,7 +45,7 @@ import java.util.logging.Logger;
  *  Keeps track of message listeners registered to specific
  *  types or to any type.
  *
- *  @version   $Revision: 9856 $
+ *  @version   $Revision: 10271 $
  *  @author    Paul Speed
  */
 public class MessageListenerRegistry<S> implements MessageListener<S>
@@ -75,7 +75,7 @@ public class MessageListenerRegistry<S> implements MessageListener<S>
         }
         
         if( !delivered ) {
-            log.log( Level.INFO, "Received message had no registered listeners: {0}", m );
+            log.log( Level.FINE, "Received message had no registered listeners: {0}", m );
         }
     }
  

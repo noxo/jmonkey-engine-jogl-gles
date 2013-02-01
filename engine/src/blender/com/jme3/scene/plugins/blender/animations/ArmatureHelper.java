@@ -181,7 +181,7 @@ public class ArmatureHelper extends AbstractBlenderHelper {
 	 *             file
 	 */
 	private BoneTrack[] getTracks250(Structure actionStructure, Skeleton skeleton, BlenderContext blenderContext) throws BlenderFileException {
-		LOGGER.log(Level.INFO, "Getting tracks!");
+		LOGGER.log(Level.FINE, "Getting tracks!");
 		IpoHelper ipoHelper = blenderContext.getHelper(IpoHelper.class);
 		int fps = blenderContext.getBlenderKey().getFps();
 		Structure groups = (Structure) actionStructure.getFieldValue("groups");
@@ -201,8 +201,9 @@ public class ArmatureHelper extends AbstractBlenderHelper {
 					bezierCurves[channelCounter++] = new BezierCurve(type, bezTriples, 2);
 				}
 
+				Bone bone = skeleton.getBone(boneIndex);
 				Ipo ipo = new Ipo(bezierCurves, fixUpAxis, blenderContext.getBlenderVersion());
-				tracks.add((BoneTrack) ipo.calculateTrack(boneIndex, 0, ipo.getLastFrame(), fps, false));
+				tracks.add((BoneTrack) ipo.calculateTrack(boneIndex, bone.getLocalRotation(), 0, ipo.getLastFrame(), fps, false));
 			}
 		}
 		return tracks.toArray(new BoneTrack[tracks.size()]);
@@ -222,7 +223,7 @@ public class ArmatureHelper extends AbstractBlenderHelper {
 	 *             file
 	 */
 	private BoneTrack[] getTracks249(Structure actionStructure, Skeleton skeleton, BlenderContext blenderContext) throws BlenderFileException {
-		LOGGER.log(Level.INFO, "Getting tracks!");
+		LOGGER.log(Level.FINE, "Getting tracks!");
 		IpoHelper ipoHelper = blenderContext.getHelper(IpoHelper.class);
 		int fps = blenderContext.getBlenderKey().getFps();
 		Structure chanbase = (Structure) actionStructure.getFieldValue("chanbase");
@@ -235,9 +236,11 @@ public class ArmatureHelper extends AbstractBlenderHelper {
 				Pointer p = (Pointer) bActionChannel.getFieldValue("ipo");
 				if (!p.isNull()) {
 					Structure ipoStructure = p.fetchData(blenderContext.getInputStream()).get(0);
+					
+					Bone bone = skeleton.getBone(boneIndex);
 					Ipo ipo = ipoHelper.fromIpoStructure(ipoStructure, blenderContext);
 					if(ipo != null) {
-						tracks.add((BoneTrack) ipo.calculateTrack(boneIndex, 0, ipo.getLastFrame(), fps, false));
+						tracks.add((BoneTrack) ipo.calculateTrack(boneIndex, bone.getLocalRotation(), 0, ipo.getLastFrame(), fps, false));
 					}
 				}
 			}

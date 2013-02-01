@@ -287,12 +287,12 @@ public class BinaryExporter implements JmeExporter {
         os = null;
 
         if (debug ) {
-            logger.info("Stats:");
-            logger.log(Level.INFO, "classes: {0}", classNum);
-            logger.log(Level.INFO, "class table: {0} bytes", classTableSize);
-            logger.log(Level.INFO, "objects: {0}", numLocations);
-            logger.log(Level.INFO, "location table: {0} bytes", locationTableSize);
-            logger.log(Level.INFO, "data: {0} bytes", location);
+            logger.fine("Stats:");
+            logger.log(Level.FINE, "classes: {0}", classNum);
+            logger.log(Level.FINE, "class table: {0} bytes", classTableSize);
+            logger.log(Level.FINE, "objects: {0}", numLocations);
+            logger.log(Level.FINE, "location table: {0} bytes", locationTableSize);
+            logger.log(Level.FINE, "data: {0} bytes", location);
         }
 
         return true;

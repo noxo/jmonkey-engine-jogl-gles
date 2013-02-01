@@ -179,7 +179,9 @@ public class BatchNode extends Node implements Savable {
         //we set the batch geometries to ignore transforms to avoid transforms of parent nodes to be applied twice        
         for (Batch batch : batches.getArray()) {
             batch.geometry.setIgnoreTransform(true);
+            batch.geometry.setUserData(UserData.JME_PHYSICSIGNORE, true);
         }
+        updateGeometricState();
     }
 
     protected void doBatch() {
@@ -234,7 +236,7 @@ public class BatchNode extends Node implements Savable {
         }
 
 
-        logger.log(Level.INFO, "Batched {0} geometries in {1} batches.", new Object[]{nbGeoms, batches.size()});
+        logger.log(Level.FINE, "Batched {0} geometries in {1} batches.", new Object[]{nbGeoms, batches.size()});
 
 
         //init temp float arrays
@@ -245,6 +247,34 @@ public class BatchNode extends Node implements Savable {
         }
     }
 
+    //in case the detached spatial is a node, we unbatch all geometries in its subegraph
+    @Override
+    public Spatial detachChildAt(int index) {
+        Spatial s = super.detachChildAt(index);
+        if (s instanceof Node) {
+            unbatchSubGraph(s);
+        }
+        return s;
+    }
+
+    /**
+     * recursively visit the subgraph and unbatch geometries
+     * @param s 
+     */
+    private void unbatchSubGraph(Spatial s) {
+        if (s instanceof Node) {
+            for (Spatial sp : ((Node) s).getChildren()) {
+                unbatchSubGraph(sp);
+            }
+        } else if (s instanceof Geometry) {
+            Geometry g = (Geometry) s;
+            if (g.isBatched()) {
+                g.unBatch();
+            }
+        }
+    }
+    
+    
     private void gatherGeomerties(Map<Material, List<Geometry>> map, Spatial n, boolean rebatch) {
 
         if (n instanceof Geometry) {

@@ -54,7 +54,7 @@ public class AndroidConfigChooser implements EGLConfigChooser {
      */
     @Override
     public EGLConfig chooseConfig(EGL10 egl, EGLDisplay display) {
-        logger.info("GLSurfaceView asks for egl config, returning: ");
+        logger.fine("GLSurfaceView asks for egl config, returning: ");
         logEGLConfig(choosenConfig, display, egl);
         return choosenConfig;
     }
@@ -76,7 +76,7 @@ public class AndroidConfigChooser implements EGLConfigChooser {
                     compChooser = new ComponentSizeChooser(8, 8, 8, 0, 16, 0);
                     choosenConfig = compChooser.chooseConfig(egl, display);
                 }
-                logger.info("JME3 using best EGL configuration available here: ");
+                logger.fine("JME3 using best EGL configuration available here: ");
                 break;
             case BEST_TRANSLUCENT:
                 compChooser = new ComponentSizeChooser(8, 8, 8, 8, 32, 0);
@@ -85,18 +85,18 @@ public class AndroidConfigChooser implements EGLConfigChooser {
                     compChooser = new ComponentSizeChooser(8, 8, 8, 8, 16, 0);
                     choosenConfig = compChooser.chooseConfig(egl, display);
                 }
-                logger.info("JME3 using best EGL configuration available here with translucent pixels: ");
+                logger.fine("JME3 using best EGL configuration available here with translucent pixels: ");
                 break;
             case FASTEST:
                 compChooser = new ComponentSizeChooser(5, 6, 5, 0, 16, 0);
                 choosenConfig = compChooser.chooseConfig(egl, display);
-                logger.info("JME3 using fastest EGL configuration available here: ");
+                logger.fine("JME3 using fastest EGL configuration available here: ");
                 break;
 
         }
 
         if (choosenConfig != null) {
-            logger.info("JME3 using choosen config: ");
+            logger.fine("JME3 using choosen config: ");
             logEGLConfig(choosenConfig, display, egl);
             pixelFormat = getPixelFormat(choosenConfig, display, egl);
             clientOpenGLESVersion = getOpenGLVersion(choosenConfig, display, egl);
@@ -151,28 +151,28 @@ public class AndroidConfigChooser implements EGLConfigChooser {
         int[] value = new int[1];
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_RED_SIZE, value);
-        logger.info(String.format("EGL_RED_SIZE  = %d", value[0]));
+        logger.fine(String.format("EGL_RED_SIZE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_GREEN_SIZE, value);
-        logger.info(String.format("EGL_GREEN_SIZE  = %d", value[0]));
+        logger.fine(String.format("EGL_GREEN_SIZE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_BLUE_SIZE, value);
-        logger.info(String.format("EGL_BLUE_SIZE  = %d", value[0]));
+        logger.fine(String.format("EGL_BLUE_SIZE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_ALPHA_SIZE, value);
-        logger.info(String.format("EGL_ALPHA_SIZE  = %d", value[0]));
+        logger.fine(String.format("EGL_ALPHA_SIZE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_DEPTH_SIZE, value);
-        logger.info(String.format("EGL_DEPTH_SIZE  = %d", value[0]));
+        logger.fine(String.format("EGL_DEPTH_SIZE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_STENCIL_SIZE, value);
-        logger.info(String.format("EGL_STENCIL_SIZE  = %d", value[0]));
+        logger.fine(String.format("EGL_STENCIL_SIZE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_RENDERABLE_TYPE, value);
-        logger.info(String.format("EGL_RENDERABLE_TYPE  = %d", value[0]));
+        logger.fine(String.format("EGL_RENDERABLE_TYPE  = %d", value[0]));
 
         egl.eglGetConfigAttrib(display, conf, EGL10.EGL_SURFACE_TYPE, value);
-        logger.info(String.format("EGL_SURFACE_TYPE  = %d", value[0]));
+        logger.fine(String.format("EGL_SURFACE_TYPE  = %d", value[0]));
     }
 
     public int getClientOpenGLESVersion() {
@@ -216,16 +216,16 @@ public class AndroidConfigChooser implements EGLConfigChooser {
                     num_config)) {
                 throw new IllegalArgumentException("eglChooseConfig#2 failed");
             }
-//            logger.log(Level.INFO, "num_config: {0}", num_config[0]);
+//            logger.log(Level.FINE, "num_config: {0}", num_config[0]);
 //
-//            logger.log(Level.INFO, "There are {0} configurations that match the configAttrs", num_config[0]);
-//            logger.log(Level.INFO, "All Matching Configs:");
+//            logger.log(Level.FINE, "There are {0} configurations that match the configAttrs", num_config[0]);
+//            logger.log(Level.FINE, "All Matching Configs:");
 //            for (int i=0; i<configs.length; i++) {
 //                if (configs[i] != null) {
-//                    logger.log(Level.INFO, "configs{0} is not null", i);
+//                    logger.log(Level.FINE, "configs{0} is not null", i);
 //                    logEGLConfig(configs[i], display, egl);
 //                } else {
-//                    logger.log(Level.INFO, "configs{0} is null", i);
+//                    logger.log(Level.FINE, "configs{0} is null", i);
 //                }
 //            }
 

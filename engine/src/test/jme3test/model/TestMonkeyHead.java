@@ -41,7 +41,6 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.system.AppSettings;
 
 public class TestMonkeyHead extends SimpleApplication {
 
@@ -51,14 +50,6 @@ public class TestMonkeyHead extends SimpleApplication {
 
     public static void main(String[] args){
         TestMonkeyHead app = new TestMonkeyHead();
-        
-        AppSettings settings = new AppSettings(true);
-        settings.setResolution(640,480);
-        settings.setRenderer("JOGL");
-        settings.setAudioRenderer("JOAL");
-        app.setShowSettings(false);
-        app.setSettings(settings);
-
         app.start();
     }
 

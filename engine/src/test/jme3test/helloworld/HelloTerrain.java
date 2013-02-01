@@ -34,7 +34,6 @@ package jme3test.helloworld;
 
 import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
-import com.jme3.system.AppSettings;
 import com.jme3.terrain.geomipmap.TerrainLodControl;
 import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.terrain.geomipmap.lodcalc.DistanceLodCalculator;
@@ -51,14 +50,6 @@ public class HelloTerrain extends SimpleApplication {
 
   public static void main(String[] args) {
     HelloTerrain app = new HelloTerrain();
-    
-    AppSettings settings = new AppSettings(true);
-    settings.setResolution(640,480);
-    settings.setRenderer("JOGL");
-    settings.setAudioRenderer("JOAL");
-    app.setShowSettings(false);
-    app.setSettings(settings);
-
     app.start();
   }
 

@@ -156,7 +156,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
 
     @Override
     public Object onRetainNonConfigurationInstance() {
-        logger.log(Level.INFO, "onRetainNonConfigurationInstance");
+        logger.log(Level.FINE, "onRetainNonConfigurationInstance");
         final DataObject data = new DataObject();
         data.app = this.app;
         inConfigChange = true;
@@ -166,7 +166,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        logger.info("onCreate");
+        logger.fine("onCreate");
         super.onCreate(savedInstanceState);
 
         JmeAndroidSystem.setActivity(this);
@@ -184,7 +184,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
 
         final DataObject data = (DataObject) getLastNonConfigurationInstance();
         if (data != null) {
-            logger.log(Level.INFO, "Using Retained App");
+            logger.log(Level.FINE, "Using Retained App");
             this.app = data.app;
 
         } else {
@@ -195,7 +195,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
             Log.d("AndroidHarness", "Resolution from Window, width:" + disp.getWidth() + ", height: " + disp.getHeight());
 
             // Create Settings
-            logger.log(Level.INFO, "Creating settings");
+            logger.log(Level.FINE, "Creating settings");
             AppSettings settings = new AppSettings(true);
             settings.setEmulateMouse(mouseEventsEnabled);
             settings.setEmulateMouseFlipAxis(mouseEventsInvertX, mouseEventsInvertY);
@@ -230,7 +230,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
 
     @Override
     protected void onRestart() {
-        logger.info("onRestart");
+        logger.fine("onRestart");
         super.onRestart();
         if (app != null) {
             app.restart();
@@ -240,13 +240,13 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
 
     @Override
     protected void onStart() {
-        logger.info("onStart");
+        logger.fine("onStart");
         super.onStart();
     }
 
     @Override
     protected void onResume() {
-        logger.info("onResume");
+        logger.fine("onResume");
         super.onResume();
         if (view != null) {
             view.onResume();
@@ -282,7 +282,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
     protected void onPause() {
         loseFocus();
 
-        logger.info("onPause");
+        logger.fine("onPause");
         super.onPause();
         if (view != null) {
             view.onPause();
@@ -292,7 +292,7 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
             //pause the audio
             AudioRenderer result = app.getAudioRenderer();
             if (result != null) {
-                logger.log(Level.INFO, "pause: {0}", result.getClass().getSimpleName());
+                logger.log(Level.FINE, "pause: {0}", result.getClass().getSimpleName());
                 if (result instanceof AndroidAudioRenderer) {
                     AndroidAudioRenderer renderer = (AndroidAudioRenderer) result;
                     renderer.pauseAll();
@@ -315,16 +315,16 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
 
     @Override
     protected void onStop() {
-        logger.info("onStop");
+        logger.fine("onStop");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        logger.info("onDestroy");
+        logger.fine("onDestroy");
         final DataObject data = (DataObject) getLastNonConfigurationInstance();
         if (data != null || inConfigChange) {
-            logger.info("In Config Change, not stopping app.");
+            logger.fine("In Config Change, not stopping app.");
         } else {
             if (app != null) {
                 app.stop(!isGLThreadPaused);
@@ -417,9 +417,9 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
     }
 
     public void layoutDisplay() {
-        logger.log(Level.INFO, "Splash Screen Picture Resource ID: {0}", splashPicID);
+        logger.log(Level.FINE, "Splash Screen Picture Resource ID: {0}", splashPicID);
         if (view == null) {
-            logger.log(Level.INFO, "view is null!");
+            logger.log(Level.FINE, "view is null!");
         }
         if (splashPicID != 0) {
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
@@ -448,15 +448,15 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
             frameLayout.addView(splashImageView, lp);
 
             setContentView(frameLayout);
-            logger.log(Level.INFO, "Splash Screen Created");
+            logger.log(Level.FINE, "Splash Screen Created");
         } else {
-            logger.log(Level.INFO, "Splash Screen Skipped.");
+            logger.log(Level.FINE, "Splash Screen Skipped.");
             setContentView(view);
         }
     }
 
     public void removeSplashScreen() {
-        logger.log(Level.INFO, "Splash Screen Picture Resource ID: {0}", splashPicID);
+        logger.log(Level.FINE, "Splash Screen Picture Resource ID: {0}", splashPicID);
         if (splashPicID != 0) {
             if (frameLayout != null) {
                 if (splashImageView != null) {
@@ -469,10 +469,10 @@ public class AndroidHarness extends Activity implements TouchListener, DialogInt
                         }
                     });
                 } else {
-                    logger.log(Level.INFO, "splashImageView is null");
+                    logger.log(Level.FINE, "splashImageView is null");
                 }
             } else {
-                logger.log(Level.INFO, "frameLayout is null");
+                logger.log(Level.FINE, "frameLayout is null");
             }
         }
     }

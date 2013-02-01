@@ -42,8 +42,6 @@ import com.jme3.post.filters.BloomFilter;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.control.LodControl;
-import com.jme3.system.AppSettings;
-
 import jme3test.post.BloomUI;
 
 /**
@@ -54,15 +52,6 @@ public class TestHoverTank extends SimpleApplication {
 
     public static void main(String[] args) {
         TestHoverTank app = new TestHoverTank();
-        
-        AppSettings settings = new AppSettings(true);
-        settings.setResolution(640,480);
-        settings.setRenderer("JOGL");
-        settings.setAudioRenderer("JOAL");
-        app.setShowSettings(false);
-        app.setSettings(settings);
-
-        
         app.start();
     }
 

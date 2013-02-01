@@ -148,10 +148,10 @@ public class OGLESShaderRenderer implements Renderer {
     }
 
     public void initialize() {
-        logger.log(Level.INFO, "Vendor: {0}", GLES20.glGetString(GLES20.GL_VENDOR));
-        logger.log(Level.INFO, "Renderer: {0}", GLES20.glGetString(GLES20.GL_RENDERER));
-        logger.log(Level.INFO, "Version: {0}", GLES20.glGetString(GLES20.GL_VERSION));
-        logger.log(Level.INFO, "Shading Language Version: {0}", GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
+        logger.log(Level.FINE, "Vendor: {0}", GLES20.glGetString(GLES20.GL_VENDOR));
+        logger.log(Level.FINE, "Renderer: {0}", GLES20.glGetString(GLES20.GL_RENDERER));
+        logger.log(Level.FINE, "Version: {0}", GLES20.glGetString(GLES20.GL_VERSION));
+        logger.log(Level.FINE, "Shading Language Version: {0}", GLES20.glGetString(GLES20.GL_SHADING_LANGUAGE_VERSION));
 
         powerVr = GLES20.glGetString(GLES20.GL_RENDERER).contains("PowerVR");
 
@@ -180,14 +180,14 @@ public class OGLESShaderRenderer implements Renderer {
 
         GLES20.glGetIntegerv(GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, intBuf16);
         vertexTextureUnits = intBuf16.get(0);
-        logger.log(Level.INFO, "VTF Units: {0}", vertexTextureUnits);
+        logger.log(Level.FINE, "VTF Units: {0}", vertexTextureUnits);
         if (vertexTextureUnits > 0) {
             caps.add(Caps.VertexTextureFetch);
         }
 
         GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_IMAGE_UNITS, intBuf16);
         fragTextureUnits = intBuf16.get(0);
-        logger.log(Level.INFO, "Texture Units: {0}", fragTextureUnits);
+        logger.log(Level.FINE, "Texture Units: {0}", fragTextureUnits);
 
         // Multiply vector count by 4 to get float count.
         GLES20.glGetIntegerv(GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS, intBuf16);
@@ -204,11 +204,11 @@ public class OGLESShaderRenderer implements Renderer {
 
         GLES20.glGetIntegerv(GLES20.GL_MAX_VERTEX_ATTRIBS, intBuf16);
         vertexAttribs = intBuf16.get(0);
-        logger.log(Level.INFO, "Vertex Attributes: {0}", vertexAttribs);
+        logger.log(Level.FINE, "Vertex Attributes: {0}", vertexAttribs);
 
         GLES20.glGetIntegerv(GLES20.GL_SUBPIXEL_BITS, intBuf16);
         int subpixelBits = intBuf16.get(0);
-        logger.log(Level.INFO, "Subpixel Bits: {0}", subpixelBits);
+        logger.log(Level.FINE, "Subpixel Bits: {0}", subpixelBits);
 
 //        GLES10.glGetIntegerv(GLES10.GL_MAX_ELEMENTS_VERTICES, intBuf16);
 //        maxVertCount = intBuf16.get(0);
@@ -220,11 +220,11 @@ public class OGLESShaderRenderer implements Renderer {
 
         GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, intBuf16);
         maxTexSize = intBuf16.get(0);
-        logger.log(Level.INFO, "Maximum Texture Resolution: {0}", maxTexSize);
+        logger.log(Level.FINE, "Maximum Texture Resolution: {0}", maxTexSize);
 
         GLES20.glGetIntegerv(GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE, intBuf16);
         maxCubeTexSize = intBuf16.get(0);
-        logger.log(Level.INFO, "Maximum CubeMap Resolution: {0}", maxCubeTexSize);
+        logger.log(Level.FINE, "Maximum CubeMap Resolution: {0}", maxCubeTexSize);
 
         /*
         if (ctxCaps.GL_ARB_color_buffer_float){
@@ -306,11 +306,19 @@ public class OGLESShaderRenderer implements Renderer {
          */
 
         String extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS);
-        logger.log(Level.INFO, "GL_EXTENSIONS: {0}", extensions);
+        logger.log(Level.FINE, "GL_EXTENSIONS: {0}", extensions);
 
-        GLES20.glGetIntegerv(GLES20.GL_COMPRESSED_TEXTURE_FORMATS, intBuf16);
-        for (int i = 0; i < intBuf16.limit(); i++) {
-            logger.log(Level.INFO, "Compressed Texture Formats: {0}", intBuf16.get(i));
+        // Get number of compressed formats available.
+        GLES20.glGetIntegerv(GLES20.GL_NUM_COMPRESSED_TEXTURE_FORMATS, intBuf16);
+        int numCompressedFormats = intBuf16.get(0);
+        
+        // Allocate buffer for compressed formats.
+        IntBuffer compressedFormats = BufferUtils.createIntBuffer(numCompressedFormats);
+        GLES20.glGetIntegerv(GLES20.GL_COMPRESSED_TEXTURE_FORMATS, compressedFormats);
+        
+        // Print compressed formats.
+        for (int i = 0; i < numCompressedFormats; i++) {
+            logger.log(Level.FINE, "Compressed Texture Formats: {0}", compressedFormats.get(i));
         }
 
         TextureUtil.loadTextureFeatures(extensions);
@@ -324,13 +332,13 @@ public class OGLESShaderRenderer implements Renderer {
         // but for jME3 it doesn't matter since android versions 1.5 and below
         // are not supported.
         if (Build.VERSION.SDK_INT >= 9){
-            logger.log(Level.INFO, "Force-enabling VBO (Android 2.3 or higher)");
+            logger.log(Level.FINE, "Force-enabling VBO (Android 2.3 or higher)");
             useVBO = true;
         } else {
             useVBO = false;
         }
 
-        logger.log(Level.INFO, "Caps: {0}", caps);
+        logger.log(Level.FINE, "Caps: {0}", caps);
     }
 
     /**
@@ -798,7 +806,7 @@ public class OGLESShaderRenderer implements Renderer {
 
         if (compiledOK) {
             if (infoLog != null) {
-                logger.log(Level.INFO, "compile success: {0}, {1}", new Object[]{source.getName(), infoLog});
+                logger.log(Level.FINE, "compile success: {0}, {1}", new Object[]{source.getName(), infoLog});
             } else {
                 logger.log(Level.FINE, "compile success: {0}", source.getName());
             }
@@ -855,7 +863,7 @@ public class OGLESShaderRenderer implements Renderer {
 
         if (linkOK) {
             if (infoLog != null) {
-                logger.log(Level.INFO, "shader link success. \n{0}", infoLog);
+                logger.log(Level.FINE, "shader link success. \n{0}", infoLog);
             } else {
                 logger.fine("shader link success");
             }
@@ -1867,7 +1875,7 @@ public class OGLESShaderRenderer implements Renderer {
         assert bufId != -1;
 
         if (bufId == -1) {
-            logger.info("invalid buffer id!");
+            logger.warning("invalid buffer id!");
         }
 
         if (context.boundElementArrayVBO != bufId) {
@@ -1879,6 +1887,12 @@ public class OGLESShaderRenderer implements Renderer {
         boolean useInstancing = count > 1 && caps.contains(Caps.MeshInstancing);
 
         Buffer indexData = indexBuf.getData();
+        
+        if (indexBuf.getFormat() == Format.UnsignedInt) {
+            throw new RendererException("OpenGL ES does not support 32-bit index buffers." + 
+                                        "Split your models to avoid going over 65536 vertices.");
+        }
+        
         if (mesh.getMode() == Mode.Hybrid) {
             int[] modeStart = mesh.getModeStart();
             int[] elementLengths = mesh.getElementLengths();
@@ -1970,7 +1984,7 @@ public class OGLESShaderRenderer implements Renderer {
     }
 
     public void updateVertexArray(Mesh mesh) {
-        logger.log(Level.INFO, "updateVertexArray({0})", mesh);
+        logger.log(Level.FINE, "updateVertexArray({0})", mesh);
         int id = mesh.getId();
         /*
         if (id == -1){

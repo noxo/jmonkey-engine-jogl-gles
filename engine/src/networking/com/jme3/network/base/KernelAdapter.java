@@ -59,7 +59,7 @@ import java.util.logging.Logger;
  *  objects to 32676 bytes... even though, for example,
  *  datagram packets can hold twice that. :P</p>  
  *
- *  @version   $Revision: 9856 $
+ *  @version   $Revision: 10271 $
  *  @author    Paul Speed
  */
 public class KernelAdapter extends Thread
@@ -225,7 +225,7 @@ public class KernelAdapter extends Thread
                 for( int i = 0; i < len; i++ ) {
                     sb.append( "[" + Integer.toHexString(data[i]) + "]" ); 
                 }
-                log.log( Level.INFO, "First 10 bytes of incomplete nessage:" + sb );         
+                log.log( Level.FINE, "First 10 bytes of incomplete nessage:" + sb );         
                 throw new RuntimeException( "Envelope contained incomplete data:" + env );
             }                
         }            

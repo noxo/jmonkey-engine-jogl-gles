@@ -94,7 +94,7 @@ public class LwjglDisplay extends LwjglAbstractDisplay {
                                          settings.useStereo3D());
 
         frameRate = settings.getFrameRate();
-        logger.log(Level.INFO, "Selected display mode: {0}", displayMode);
+        logger.log(Level.FINE, "Selected display mode: {0}", displayMode);
 
         boolean pixelFormatChanged = false;
         if (created.get() && (pixelFormat.getBitsPerPixel() != pf.getBitsPerPixel()
@@ -179,7 +179,7 @@ public class LwjglDisplay extends LwjglAbstractDisplay {
                 logger.log(Level.SEVERE, "Failed to set display settings!", ex);
             }
             listener.reshape(settings.getWidth(), settings.getHeight());
-            logger.info("Display restarted.");
+            logger.fine("Display restarted.");
         }
 
         super.runLoop();

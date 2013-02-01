@@ -115,7 +115,7 @@ public class ObjectHelper extends AbstractBlenderHelper {
 		//get object data
 		int type = ((Number)objectStructure.getFieldValue("type")).intValue();
 		String name = objectStructure.getName();
-		LOGGER.log(Level.INFO, "Loading obejct: {0}", name);
+		LOGGER.log(Level.FINE, "Loading obejct: {0}", name);
 
 		int restrictflag = ((Number)objectStructure.getFieldValue("restrictflag")).intValue();
 		boolean visible = (restrictflag & 0x01) != 0;
@@ -127,13 +127,13 @@ public class ObjectHelper extends AbstractBlenderHelper {
 			Structure parentStructure = pParent.fetchData(blenderContext.getInputStream()).get(0);
 			parent = this.toObject(parentStructure, blenderContext);
 		}
-
+		
 		Transform t = this.getTransformation(objectStructure, blenderContext);
 		
 		try {
 			switch(type) {
 				case OBJECT_TYPE_EMPTY:
-					LOGGER.log(Level.INFO, "Importing empty.");
+					LOGGER.log(Level.FINE, "Importing empty.");
 					Node empty = new Node(name);
 					empty.setLocalTransform(t);
 					if(parent instanceof Node) {
@@ -142,7 +142,7 @@ public class ObjectHelper extends AbstractBlenderHelper {
 					result = empty;
 					break;
 				case OBJECT_TYPE_MESH:
-					LOGGER.log(Level.INFO, "Importing mesh.");
+					LOGGER.log(Level.FINE, "Importing mesh.");
 					Node node = new Node(name);
 					node.setCullHint(visible ? CullHint.Always : CullHint.Inherit);
 
@@ -158,13 +158,6 @@ public class ObjectHelper extends AbstractBlenderHelper {
                     }
 					node.setLocalTransform(t);
 
-					//reading and applying all modifiers
-					ModifierHelper modifierHelper = blenderContext.getHelper(ModifierHelper.class);
-					Collection<Modifier> modifiers = modifierHelper.readModifiers(objectStructure, blenderContext);
-					for(Modifier modifier : modifiers) {
-						modifier.apply(node, blenderContext);
-					}
-
 					//setting the parent
 					if(parent instanceof Node) {
 						((Node)parent).attachChild(node);
@@ -173,7 +166,7 @@ public class ObjectHelper extends AbstractBlenderHelper {
 					break;
 				case OBJECT_TYPE_SURF:
 				case OBJECT_TYPE_CURVE:
-					LOGGER.log(Level.INFO, "Importing curve/nurb.");
+					LOGGER.log(Level.FINE, "Importing curve/nurb.");
 					Pointer pCurve = (Pointer)objectStructure.getFieldValue("data");
 					if(pCurve.isNotNull()) {
 						CurvesHelper curvesHelper = blenderContext.getHelper(CurvesHelper.class);
@@ -187,7 +180,7 @@ public class ObjectHelper extends AbstractBlenderHelper {
 					}
 					break;
 				case OBJECT_TYPE_LAMP:
-					LOGGER.log(Level.INFO, "Importing lamp.");
+					LOGGER.log(Level.FINE, "Importing lamp.");
 					Pointer pLamp = (Pointer)objectStructure.getFieldValue("data");
 					if(pLamp.isNotNull()) {
 						LightHelper lightHelper = blenderContext.getHelper(LightHelper.class);
@@ -216,7 +209,7 @@ public class ObjectHelper extends AbstractBlenderHelper {
 					Node armature = new Node(name);
 					armature.setLocalTransform(t);
 					armature.setUserData(ArmatureHelper.ARMETURE_NODE_MARKER, Boolean.TRUE);
-					//TODO: modifiers for armature ????
+					
 					if(parent instanceof Node) {
 						((Node)parent).attachChild(armature);
 					}
@@ -233,6 +226,14 @@ public class ObjectHelper extends AbstractBlenderHelper {
 			result.updateModelBound();//I prefer do compute bounding box here than read it from the file
 			
 			blenderContext.addLoadedFeatures(objectStructure.getOldMemoryAddress(), name, objectStructure, result);
+			
+			//applying modifiers
+			LOGGER.log(Level.FINE, "Reading and applying object's modifiers.");
+			ModifierHelper modifierHelper = blenderContext.getHelper(ModifierHelper.class);
+			Collection<Modifier> modifiers = modifierHelper.readModifiers(objectStructure, blenderContext);
+			for(Modifier modifier : modifiers) {
+				modifier.apply(result, blenderContext);
+			}
 			
 			//loading constraints connected with this object
 			ConstraintHelper constraintHelper = blenderContext.getHelper(ConstraintHelper.class);

@@ -49,7 +49,7 @@ import java.util.logging.Logger;
  *  A default implementation of the Client interface that delegates
  *  its network connectivity to a kernel.Connector.
  *
- *  @version   $Revision: 9856 $
+ *  @version   $Revision: 10271 $
  *  @author    Paul Speed
  */
 public class DefaultClient implements Client
@@ -383,7 +383,7 @@ public class DefaultClient implements Client
         if( m instanceof ClientRegistrationMessage ) {
             // Then we've gotten our real id
             this.id = (int)((ClientRegistrationMessage)m).getId();
-            log.log( Level.INFO, "Connection established, id:{0}.", this.id );
+            log.log( Level.FINE, "Connection established, id:{0}.", this.id );
             connecting.countDown();
             fireConnected();
             return;

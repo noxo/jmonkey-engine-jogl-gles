@@ -101,9 +101,13 @@ public class ModifierHelper extends AbstractBlenderHelper {
 				}
 
 				if (modifier != null) {
-					result.add(modifier);
-					blenderContext.addModifier(objectStructure.getOldMemoryAddress(), modifier);
-					alreadyReadModifiers.add(modifierType);
+					if(modifier.isModifying()) {
+						result.add(modifier);
+						blenderContext.addModifier(objectStructure.getOldMemoryAddress(), modifier);
+						alreadyReadModifiers.add(modifierType);
+					} else {
+						LOGGER.log(Level.WARNING, "The modifier {0} will cause no changes in the model. It will be ignored!", modifierStructure.getName());
+					}
 				} else {
 					LOGGER.log(Level.WARNING, "Unsupported modifier type: {0}", modifierStructure.getType());
 				}
@@ -180,8 +184,10 @@ public class ModifierHelper extends AbstractBlenderHelper {
 				Structure actionStructure = pAction.fetchData(blenderContext.getInputStream()).get(0);
 				IpoHelper ipoHelper = blenderContext.getHelper(IpoHelper.class);
 				Ipo ipo = ipoHelper.fromAction(actionStructure, blenderContext);
-				result = new ObjectAnimationModifier(ipo, actionStructure.getName(), objectStructure.getOldMemoryAddress(), blenderContext);
-				blenderContext.addModifier(objectStructure.getOldMemoryAddress(), result);
+				if(ipo != null) {//ipo can be null if it has no curves applied, ommit such modifier then
+					result = new ObjectAnimationModifier(ipo, actionStructure.getName(), objectStructure.getOldMemoryAddress(), blenderContext);
+					blenderContext.addModifier(objectStructure.getOldMemoryAddress(), result);
+				}
 			}
 		}
 		return result;
